@@ -3,27 +3,36 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Ajeet Sir Tuition</title>
+<title>Topper's Hub Education</title>
+<meta name="theme-color" content="#0b0c10">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Topper's Hub">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap">
 <style>
-:root{--bg:#0f3d3a;--card:#17504a;--line:#2a6b63;--ink:#f4f7f2;--mut:#a9cdc5;--chalk:#ffd84d;--ok:#7be0a6;--bad:#ff7a6b}
-*{box-sizing:border-box;margin:0;font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif}
+:root{--bg:#0b0c10;--card:#16171f;--line:#2b2d3a;--ink:#f4f7f2;--mut:#a4a8bd;--chalk:#f5c451;--ok:#4ade80;--bad:#ff6b6b}
+*{box-sizing:border-box;margin:0;font-family:"Poppins","Segoe UI",system-ui,sans-serif}
 body{background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden}
 button,input,textarea{font:inherit;color:inherit}
-header{display:flex;align-items:center;gap:10px;padding:14px 16px;background:#0b2f2c;position:sticky;top:0;z-index:5;animation:drop .5s}
+header{display:flex;align-items:center;gap:10px;padding:14px 16px;background:#08080b;position:sticky;top:0;z-index:5;animation:drop .5s}
 header b{flex:1;font-size:18px;letter-spacing:.3px}
-.tag{background:var(--chalk);color:#243;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:700}
+.tag{background:var(--chalk);color:#1a1405;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:700}
 main{max-width:720px;margin:0 auto;padding:14px 14px 60px}
 nav{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto}
 nav button{flex:1;white-space:nowrap;padding:10px 12px;border:2px dashed var(--line);background:none;border-radius:12px;cursor:pointer;transition:.25s}
-nav button.on{background:var(--chalk);color:#243;border:2px solid var(--chalk);transform:translateY(-2px)}
+nav button.on{background:var(--chalk);color:#1a1405;border:2px solid var(--chalk);transform:translateY(-2px)}
 .card{background:var(--card);border-radius:16px;padding:14px;margin-bottom:12px;border:1px solid var(--line)}
 .pop{animation:pop .45s cubic-bezier(.2,1.4,.4,1) backwards}
 .pop:nth-child(2){animation-delay:.05s}.pop:nth-child(3){animation-delay:.1s}.pop:nth-child(4){animation-delay:.15s}.pop:nth-child(n+5){animation-delay:.2s}
 h3{margin-bottom:10px;color:var(--chalk)}
-input,textarea{width:100%;padding:11px;border-radius:10px;border:1px solid var(--line);background:#0e3532;margin-bottom:8px;outline:none;transition:.2s}
-input:focus,textarea:focus{border-color:var(--chalk);box-shadow:0 0 0 3px #ffd84d33}
+input,textarea{width:100%;padding:11px;border-radius:10px;border:1px solid var(--line);background:#0d0e14;margin-bottom:8px;outline:none;transition:.2s}
+input:focus,textarea:focus{border-color:var(--chalk);box-shadow:0 0 0 3px #f5c45133}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:0 8px}
-.btn{width:100%;padding:12px;border:0;border-radius:12px;background:var(--chalk);color:#243;font-weight:700;cursor:pointer;transition:.2s}
+.btn{width:100%;padding:12px;border:0;border-radius:12px;background:var(--chalk);color:#1a1405;font-weight:700;cursor:pointer;transition:.2s}
 .btn:active{transform:scale(.96)}
 .ghost{background:none;border:1px solid var(--line);border-radius:10px;padding:7px 11px;cursor:pointer;transition:.2s}
 .ghost:hover{border-color:var(--chalk)}
@@ -35,13 +44,13 @@ small{color:var(--mut)}
 .ring{width:62px;height:62px;flex:none}
 .rp{animation:dash 1.3s ease-out}
 .row2{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
-.chip{border:0;border-radius:99px;padding:8px 14px;font-weight:700;cursor:pointer;color:#243;transition:.2s}
+.chip{border:0;border-radius:99px;padding:8px 14px;font-weight:700;cursor:pointer;color:#1a1405;transition:.2s}
 .chip.g{background:var(--ok)}.chip.r{background:var(--bad)}
 .pa{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:none;margin-left:5px;cursor:pointer;font-weight:700;transition:.2s}
-.pa.g{background:var(--ok);color:#243}.pa.r{background:var(--bad);color:#243;animation:shake .35s}
-.bar{height:10px;border-radius:9px;background:#0e3532;overflow:hidden;margin:6px 0}
+.pa.g{background:var(--ok);color:#1a1405}.pa.r{background:var(--bad);color:#1a1405;animation:shake .35s}
+.bar{height:10px;border-radius:9px;background:#0d0e14;overflow:hidden;margin:6px 0}
 .bar span{display:block;height:100%;background:var(--chalk);border-radius:9px;animation:grow 1s ease-out}
-.note{border-left:4px solid var(--chalk);padding:6px 10px;margin-bottom:8px;background:#0e3532;border-radius:0 10px 10px 0}
+.note{border-left:4px solid var(--chalk);padding:6px 10px;margin-bottom:8px;background:#0d0e14;border-radius:0 10px 10px 0}
 .pay{font-size:20px;font-weight:800;margin:6px 0 10px}
 .empty{text-align:center;padding:30px 10px;color:var(--mut)}
 #login{min-height:100vh;display:grid;place-items:center;padding:20px;position:relative;overflow:hidden}
@@ -62,7 +71,7 @@ small{color:var(--mut)}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 @media(max-width:420px){.row{grid-template-columns:1fr}}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
-.box{background:#0e3532;border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.box{background:#0d0e14;border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
 .box b{font-size:20px}
 .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
 .cols .card{margin:0}
@@ -71,24 +80,59 @@ small{color:var(--mut)}
 .modal img{width:100%;border-radius:12px;background:#fff;margin:6px 0}
 .qr{max-width:200px;border-radius:10px;background:#fff;display:block;margin:8px 0}
 .dt{display:block;margin:0 0 4px}
-.side{position:fixed;top:0;left:0;bottom:0;width:250px;background:#0b2f2c;transform:translateX(-105%);z-index:7;padding:72px 10px 10px;display:flex;flex-direction:column;gap:6px;overflow-y:auto}
+.side{position:fixed;top:0;left:0;bottom:0;width:250px;background:#08080b;transform:translateX(-105%);z-index:7;padding:72px 10px 10px;display:flex;flex-direction:column;gap:6px;overflow-y:auto}
 .side.on{transform:none;animation:slide .25s}
 .side button{text-align:left;padding:12px;border:0;border-radius:10px;background:none;cursor:pointer;transition:.2s}
-.side button.on{background:var(--chalk);color:#243;font-weight:700}
+.side button.on{background:var(--chalk);color:#1a1405;font-weight:700}
 .ov{display:none;position:fixed;inset:0;background:#0008;z-index:6}.ov.on{display:block}
 header{z-index:5}header .ghost{font-size:20px;line-height:1}
 .tile{cursor:pointer;text-align:center;margin:0}.tile i{display:block;font-style:normal;font-size:26px;font-weight:800}
 @keyframes slide{from{transform:translateX(-100%)}}
+body{background:radial-gradient(circle at 8% 0,#4a3a0f 0,transparent 38%),radial-gradient(circle at 100% 35%,#3a3a9055 0,transparent 36%),var(--bg);background-attachment:fixed}
+header{background:linear-gradient(90deg,#08080b,#1f2030);box-shadow:0 6px 20px #0006}
+.card{background:linear-gradient(160deg,#1c1d28,#14151d);box-shadow:0 8px 22px #0004;border-radius:18px}
+.btn{background:linear-gradient(90deg,#f5c451,#e9a23b);box-shadow:0 6px 16px #e9a23b44}
+.stats div{background:linear-gradient(160deg,#1c1d28,#14151d);box-shadow:0 6px 16px #0003}
+h3{letter-spacing:.3px}
+main{padding-bottom:96px}
+a.btn,.lnk{display:block;text-align:center;text-decoration:none;margin-top:10px;padding:12px;border-radius:12px}
+a.ghost{color:var(--ink)}
+.tb{position:fixed;left:0;right:0;bottom:0;display:flex;gap:6px;padding:8px;background:#08080b;z-index:5;box-shadow:0 -6px 20px #0006}
+.tb button{flex:1;border:0;background:none;padding:10px 4px;border-radius:12px;cursor:pointer;transition:.2s}
+.tb button.on{background:var(--chalk);color:#1a1405;font-weight:700}
+.vid{position:relative;cursor:pointer}.vid img{width:100%;border-radius:12px;display:block}
+.vid::after{content:"▶";position:absolute;inset:0;display:grid;place-items:center;font-size:38px;color:#fff;text-shadow:0 2px 12px #000}
+iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:12px;background:#000}
+.chk{display:flex;align-items:center;margin:12px 0}
+.tb button{font-size:13px}
+header{background:rgba(8,8,11,.78);backdrop-filter:blur(14px);border-bottom:1px solid #ffffff14}
+.lg{width:38px;height:38px;border-radius:50%;box-shadow:0 0 0 2px #f5c45199}
+.biglogo{width:150px;height:150px;border-radius:50%;display:block;margin:0 auto;box-shadow:0 0 0 3px #f5c451,0 0 40px #f5c45155;animation:glow 3s ease-in-out infinite}
+.login h1{background:linear-gradient(90deg,#fff,#f5c451);-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:.5px}
+.card{border:1px solid #ffffff12}
+.tag{background:linear-gradient(90deg,#f5c451,#e9a23b)}
+.btn{position:relative;overflow:hidden}
+.btn::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,#fff7,transparent);transform:skewX(-20deg);animation:sh 3.4s infinite}
+.side button.on,nav button.on,.tb button.on{background:linear-gradient(90deg,#f5c451,#e9a23b)}
+#inst{position:fixed;top:0;left:0;right:0;z-index:20;transform:translateY(-110%);transition:.4s;background:linear-gradient(90deg,#f5c451,#e9a23b);color:#1a1405;display:flex;align-items:center;gap:10px;padding:8px 12px;font-weight:600;font-size:14px}
+#inst.on{transform:none}
+#inst img{width:30px;height:30px;border-radius:50%}
+#inst button{border:0;border-radius:99px;padding:8px 14px;background:#08080b;color:#fff;font-weight:700;cursor:pointer}
+#inst .x{background:none;color:#1a1405;padding:4px 8px;font-size:18px}
+@keyframes glow{50%{box-shadow:0 0 0 3px #f5c451,0 0 70px #f5c45188}}
+@keyframes sh{to{left:130%}}
 </style>
 </head>
 <body>
 <div id="app"></div>
+<div id="inst"></div>
 <div id="toast"></div>
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import{getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import{getFirestore,collection,doc,addDoc,setDoc,updateDoc,deleteDoc,onSnapshot,query,where,orderBy,arrayUnion,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 const ADMINS=["hassantoons0@gmail.com"];
+const YT="UC55poG3I6AozCNdQTvks8GA",YTURL="https://www.youtube.com/@topperguru43",IG="https://www.instagram.com/ajeetsir_official";
 const app=initializeApp({apiKey:"AIzaSyBH-59V78CiFn4FNvtTsCUmX-HRyQUTt4s",authDomain:"ajeetsir.firebaseapp.com",projectId:"ajeetsir",storageBucket:"ajeetsir.firebasestorage.app",messagingSenderId:"34997095962",appId:"1:34997095962:web:da64694f3baf7540258ba3"});
 const auth=getAuth(app),db=getFirestore(app);
 const root=document.getElementById("app");
@@ -101,17 +145,27 @@ const pct=a=>{const v=Object.values(a||{});return v.length?Math.round(v.filter(x
 const val=id=>document.getElementById(id)?.value.trim()||"";
 const byTs=(a,b)=>(b.ts?.seconds||9e9)-(a.ts?.seconds||9e9);
 function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("on");setTimeout(()=>t.classList.remove("on"),2600)}
-const ring=p=>`<svg class="ring" viewBox="0 0 36 36"><path d="M18 2a16 16 0 1 1 0 32a16 16 0 1 1 0-32" fill="none" stroke="#0e3532" stroke-width="3"/><path class="rp" pathLength="100" d="M18 2a16 16 0 1 1 0 32a16 16 0 1 1 0-32" fill="none" stroke="#7be0a6" stroke-width="3" stroke-linecap="round" stroke-dasharray="${p} 100"/><text x="18" y="20.5" text-anchor="middle" fill="#fff" font-size="8" font-weight="700">${p}%</text></svg>`;
-const shell=(role,body)=>{root.innerHTML=`<header><b>🎓 Ajeet Sir Tuition</b><span class="tag">${role}</span><button class="ghost" data-a="out">Logout</button></header><main>${body}</main>`};
+const ring=p=>`<svg class="ring" viewBox="0 0 36 36"><path d="M18 2a16 16 0 1 1 0 32a16 16 0 1 1 0-32" fill="none" stroke="#0d0e14" stroke-width="3"/><path class="rp" pathLength="100" d="M18 2a16 16 0 1 1 0 32a16 16 0 1 1 0-32" fill="none" stroke="#4ade80" stroke-width="3" stroke-linecap="round" stroke-dasharray="${p} 100"/><text x="18" y="20.5" text-anchor="middle" fill="#fff" font-size="8" font-weight="700">${p}%</text></svg>`;
+const shell=(role,body)=>{root.innerHTML=`<header><img class="lg" src="logo.png" alt=""><b>Topper's Hub</b><span class="tag">${role}</span><button class="ghost" data-a="out">Logout</button></header><main>${body}</main>`};
 const toQR=f=>new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>{const k=Math.min(1,500/Math.max(i.width,i.height)),c=document.createElement("canvas");c.width=i.width*k;c.height=i.height*k;const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(i,0,0,c.width,c.height);ok(c.toDataURL("image/jpeg",.85))};i.onerror=no;i.src=r.result};r.readAsDataURL(f)});
-root.addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(b&&acts[b.dataset.a])acts[b.dataset.a](b.dataset)});
+document.addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(b&&acts[b.dataset.a])acts[b.dataset.a](b.dataset)});
 root.addEventListener("change",async e=>{if(e.target.id!="qf"||!e.target.files[0])return;try{await setDoc(doc(db,"config","pay"),{qr:await toQR(e.target.files[0])},{merge:true});toast("QR code saved")}catch(x){toast("Could not save QR")}});
+root.addEventListener("input",e=>{if(e.target.id!="q")return;const v=e.target.value.toLowerCase();root.querySelectorAll(".sc").forEach(c=>c.style.display=c.textContent.toLowerCase().includes(v)?"":"none")});
 acts.out=()=>signOut(auth);
+const inst=document.getElementById("inst");let ip=null;
+const standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone;
+const showInst=()=>{try{if(standalone||sessionStorage.getItem("noinst"))return}catch(e){}inst.innerHTML=`<img src="logo.png" alt=""><span style="flex:1">Use the Topper's Hub app</span><button data-a="inst">Use app</button><button class="x" data-a="noinst">✕</button>`;inst.classList.add("on")};
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();ip=e;showInst()});
+window.addEventListener("appinstalled",()=>inst.classList.remove("on"));
+if(/iphone|ipad|ipod/i.test(navigator.userAgent))setTimeout(showInst,1200);
+acts.inst=async()=>{if(ip){ip.prompt();await ip.userChoice;ip=null;inst.classList.remove("on")}else toast("Tap the Share button, then Add to Home Screen")};
+acts.noinst=()=>{try{sessionStorage.setItem("noinst","1")}catch(e){}inst.classList.remove("on")};
+if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
 
 function loginView(){
   unsubs.forEach(f=>f());unsubs=[];
-  root.innerHTML=`<div id="login"><div class="blob" style="width:260px;height:260px;background:#ffd84d;top:-60px;left:-70px"></div><div class="blob" style="width:300px;height:300px;background:#2ec4a0;bottom:-90px;right:-90px;animation-delay:-4s"></div>
-  <div class="login"><div style="font-size:56px">📚</div><h1>Ajeet Sir Tuition</h1><p>Fees, attendance and test reports in one place. Sign in with your Gmail.</p>
+  root.innerHTML=`<div id="login"><div class="blob" style="width:260px;height:260px;background:#f5c451;top:-60px;left:-70px"></div><div class="blob" style="width:300px;height:300px;background:#6d5dfc;bottom:-90px;right:-90px;animation-delay:-4s"></div>
+  <div class="login"><img class="biglogo" src="logo.png" alt="Topper's Hub Education"><h1>Topper's Hub</h1><p>Education · Fees, attendance and test reports in one place. Sign in with your Gmail.</p>
   <button class="gbtn" data-a="g"><svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.6 5.9c4.4-4.1 7-10.1 7-17.6z"/><path fill="#FBBC05" d="M10.5 28.7A14.5 14.5 0 0 1 9.5 24c0-1.6.3-3.2.8-4.7l-7.9-6.1A24 24 0 0 0 0 24c0 3.9.9 7.5 2.6 10.8l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.6-5.9c-2.1 1.4-4.9 2.3-8.3 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg>Sign in with Google</button></div></div>`;
 }
 acts.g=async()=>{try{await signInWithPopup(auth,new GoogleAuthProvider())}catch(e){toast("Sign-in failed: "+(e.code||e.message))}};
@@ -123,38 +177,54 @@ onAuthStateChanged(auth,u=>{
 });
 
 function adminView(){
-  let S=[],N=[],P=[],C={},tab="d",open=false;
+  let S=[],N=[],P=[],V=[],H=[],F={},C={},tab="d",open=false;
   const R=id=>doc(db,"students",id),find=id=>S.find(x=>x.id==id);
-  const M=[["d","Dashboard","📊"],["add","Add student","➕"],["s","Students","👩‍🎓"],["att","Attendance","✅"],["f","Fees","💰"],["a","Admissions","🗓"],["t","Tests","📝"],["p","Payments","💳"],["n","Notices","📢"],["c","Settings","⚙️"]];
+  const M=[["d","Dashboard","📊"],["add","Add student","➕"],["s","Students","👩‍🎓"],["att","Attendance","✅"],["f","Fees","💰"],["a","Admissions","🗓"],["t","Tests","📝"],["h","Homework","📚"],["v","Videos","🎬"],["fs","Fee structure","🏷"],["p","Payments","💳"],["n","Notices","📢"],["c","Settings","⚙️"]];
   const pa=s=>`<span><button class="pa ${s.att?.[today()]=="P"?"g":""}" data-a="att" data-id="${s.id}" data-v="P">P</button><button class="pa ${s.att?.[today()]=="A"?"r":""}" data-a="att" data-id="${s.id}" data-v="A">A</button></span>`;
   const draw=()=>{
     const pend=S.reduce((x,s)=>x+(+s.pending||0),0),got=S.reduce((x,s)=>x+(+s.paid||0),0),claims=P.filter(p=>p.status=="pending");
     const pres=S.filter(s=>s.att?.[today()]=="P").length,abs=S.filter(s=>s.att?.[today()]=="A").length;
     const none=`<div class="empty">No students yet. Use "Add student" from the menu.</div>`;
-    let h="";
-    if(tab=="d")h=`<div class="cols">${[["s",S.length,"Students"],["f",money(pend),"Pending fees"],["f",money(got),"Fees paid"],["att",pres,"Present today"],["att",abs,"Absent today"],["a",S.filter(s=>s.adm==today()).length,"Admissions today"],["p",claims.length,"Payments to confirm"]].map(([k,v,l])=>`<div class="card pop tile" data-a="go" data-k="${k}"><i>${v}</i><small>${l}</small></div>`).join("")}</div>`;
+    const sb=`<input id="q" placeholder="Search by name or class">`;let h="";
+    if(tab=="d")h=`<div class="cols">${[["s",S.length,"Students"],["f",money(pend),"Total pending"],["f",money(got),"Total received"],["att",pres,"Present today"],["att",abs,"Absent today"],["a",S.filter(s=>s.adm==today()).length,"Admissions today"],["p",claims.length,"Payments to confirm"]].map(([k,v,l])=>`<div class="card pop tile" data-a="go" data-k="${k}"><i>${v}</i><small>${l}</small></div>`).join("")}</div>`;
     if(tab=="add")h=`<div class="card pop"><h3>Add new student</h3><div class="row"><input id="fn" placeholder="Name"><input id="fc" placeholder="Class"><input id="fe" type="email" placeholder="Parent's Gmail"><input id="ff" type="number" placeholder="Pending fees ₹"></div><small class="dt">Admission date</small><input id="fd" type="date" value="${today()}"><button class="btn" data-a="add">Save student</button></div>`;
-    if(tab=="s")h=`<h3>Saved students (${S.length})</h3>`+(S.length?S.map(s=>`<div class="card pop"><div class="top"><div><b>${esc(s.name)}</b> <small>· ${esc(s.cls)}</small><br><small>${esc(s.parentEmail)}</small><br><small>Admitted: ${esc(s.adm||"-")}</small><br><small>Address: ${esc(s.address||"not added yet")}</small></div>${ring(pct(s.att))}</div><div class="row2"><button class="ghost" data-a="del" data-id="${s.id}">Delete student</button></div></div>`).join(""):none);
-    if(tab=="att")h=`<h3>Attendance · ${today()}</h3><div class="stats"><div><i style="color:var(--ok)">${pres}</i>Present</div><div><i style="color:var(--bad)">${abs}</i>Absent</div><div><i>${S.length-pres-abs}</i>Not marked</div></div>`+(S.length?S.map(s=>`<div class="card pop"><div class="top"><div><b>${esc(s.name)}</b><br><small>${esc(s.cls)} · overall ${pct(s.att)}%</small></div>${pa(s)}</div></div>`).join(""):none);
-    if(tab=="f")h=`<h3>Fees</h3><div class="stats"><div><i style="color:var(--bad)">${money(pend)}</i>Pending</div><div><i style="color:var(--ok)">${money(got)}</i>Paid</div><div><i>${S.length}</i>Students</div></div>`+(S.length?S.map(s=>`<div class="card pop"><b>${esc(s.name)}</b> <small>· ${esc(s.cls)}</small><div class="two"><div class="box"><small>Pending</small><b style="color:var(--bad)">${money(s.pending)}</b><button class="ghost" data-a="edit" data-id="${s.id}">Edit pending</button></div><div class="box"><small>Paid</small><b style="color:var(--ok)">${money(s.paid)}</b><button class="ghost" data-a="paid" data-id="${s.id}">Mark paid</button></div></div></div>`).join(""):none);
+    if(tab=="s")h=`<h3>Saved students (${S.length})</h3>${sb}`+(S.length?S.map(s=>`<div class="card pop sc"><div class="top"><div><b>${esc(s.name)}</b> <small>· ${esc(s.cls)}</small><br><small>${esc(s.parentEmail)}</small><br><small>Admitted: ${esc(s.adm||"-")}</small><br><small>Address: ${esc(s.address||"not added yet")}</small></div>${ring(pct(s.att))}</div><div class="row2"><button class="ghost" data-a="del" data-id="${s.id}">Delete student</button></div></div>`).join(""):none);
+    if(tab=="att")h=`<h3>Attendance · ${today()}</h3><div class="stats"><div><i style="color:var(--ok)">${pres}</i>Present</div><div><i style="color:var(--bad)">${abs}</i>Absent</div><div><i>${S.length-pres-abs}</i>Not marked</div></div>${sb}`+(S.length?S.map(s=>`<div class="card pop sc"><div class="top"><div><b>${esc(s.name)}</b><br><small>${esc(s.cls)} · overall ${pct(s.att)}%</small></div>${pa(s)}</div></div>`).join(""):none);
+    if(tab=="f")h=`<h3>Fees</h3><div class="stats"><div><i style="color:var(--ok)">${money(got)}</i>Total received</div><div><i style="color:var(--bad)">${money(pend)}</i>Total pending</div><div><i>${S.length}</i>Students</div></div>${sb}`+(S.length?S.map(s=>`<div class="card pop sc"><b style="font-size:18px">${esc(s.name)}</b> <small>· ${esc(s.cls)}</small><p style="margin:6px 0 12px"><span style="color:var(--bad)">${money(s.pending)} pending</span> · <span style="color:var(--ok)">${money(s.paid)} paid</span></p><div class="row"><div><small class="dt">Edit pending (₹)</small><input id="pe_${s.id}" type="number" value="${+s.pending||0}"><button class="ghost" data-a="edit" data-id="${s.id}">Save pending</button></div><div><small class="dt">Received now (₹)</small><input id="rc_${s.id}" type="number" placeholder="Amount"><button class="ghost" data-a="paid" data-id="${s.id}">Mark paid</button></div></div></div>`).join(""):none);
     if(tab=="a")h=`<h3>Admissions</h3><div class="cols">${[[0,"Today"],[1,"Yesterday"],[2,"Day before yesterday"]].map(([n,l])=>{const L=S.filter(s=>s.adm==dstr(n));return `<div class="card pop"><h3>${l}</h3><small>${dstr(n)} · ${L.length} admission${L.length==1?"":"s"}</small><br><br>${L.length?L.map(s=>`<div class="note"><b>${esc(s.name)}</b><br><small>${esc(s.cls)}</small></div>`).join(""):`<small>No admissions</small>`}</div>`}).join("")}</div>`;
     if(tab=="t")h=`<h3>Tests</h3>`+(S.length?S.map(s=>{const l=(s.tests||[]).slice(-1)[0];return `<div class="card pop"><div class="top"><div><b>${esc(s.name)}</b><br><small>${l?`${esc(l.n)}: ${l.m}/${l.x}`:"No tests yet"}</small></div><button class="ghost" data-a="test" data-id="${s.id}">Add test</button></div></div>`}).join(""):none);
     if(tab=="p")h=`<h3>Payments</h3>`+(P.length?[...P].sort(byTs).map(p=>`<div class="card pop"><div class="top"><div><b>${esc(p.name)}</b><br><small>${money(p.amt)} · ${esc(p.parentEmail)}</small></div><span class="chip ${p.status=="approved"?"g":p.status=="rejected"?"r":""}" style="${p.status=="pending"?"background:var(--chalk)":""}">${p.status=="pending"?"Awaiting":p.status=="approved"?"Approved":"Rejected"}</span></div>${p.status=="pending"?`<div class="row2"><button class="chip g" data-a="ok" data-id="${p.id}">Approve</button><button class="ghost" data-a="no" data-id="${p.id}">Reject</button></div>`:""}</div>`).join(""):`<div class="empty">No payment confirmations yet.</div>`);
     if(tab=="n")h=`<div class="card pop"><h3>Send a notice to everyone</h3><textarea id="nt" rows="3" placeholder="Example: No class tomorrow"></textarea><button class="btn" data-a="post">Send notice</button></div>`+N.map(n=>`<div class="card pop"><div class="top"><span>${esc(n.t)}</span><button class="ghost" data-a="deln" data-id="${n.id}">Delete</button></div></div>`).join("");
-    if(tab=="c")h=`<div class="card pop"><h3>Payment QR code</h3><p><small>Upload your payment QR. Parents see it when they tap Pay.</small></p>${C.qr?`<img class="qr" src="${C.qr}" alt="QR">`:`<p><small>No QR uploaded yet.</small></p>`}<br><input id="qf" type="file" accept="image/*"></div>`;
-    root.innerHTML=`<header><button class="ghost" data-a="menu">☰</button><b>${M.find(x=>x[0]==tab)[1]}</b><span class="tag">Admin</span></header><div class="ov ${open?"on":""}" data-a="menu"></div><aside class="side ${open?"on":""}">${M.map(([k,l,i])=>`<button class="${tab==k?"on":""}" data-a="go" data-k="${k}">${i} ${l}${k=="p"&&claims.length?` (${claims.length})`:""}</button>`).join("")}<button data-a="out">🚪 Logout</button></aside><main>${h}</main>`;
+    if(tab=="v")h=`<div class="card pop"><h3>Add video</h3><input id="vl" placeholder="YouTube video link"><input id="vt" placeholder="Title (optional)"><button class="btn" data-a="addv">Add video</button></div>`+[...V].sort(byTs).map(v=>`<div class="card pop"><div class="top"><span>${esc(v.t)}</span><button class="ghost" data-a="delv" data-id="${v.id}">Delete</button></div></div>`).join("");
+    if(tab=="h")h=`<div class="card pop"><h3>Post homework</h3><input id="hc" placeholder="Class (or All)"><textarea id="ht" rows="3" placeholder="Example: Exercise 4.2, Q1 to Q10"></textarea><button class="btn" data-a="addh">Post homework</button></div>`+[...H].sort(byTs).map(x=>`<div class="card pop"><div class="top"><span><b>${esc(x.cls)}</b><br>${esc(x.t)}</span><button class="ghost" data-a="delh" data-id="${x.id}">Delete</button></div></div>`).join("");
+    if(tab=="fs"){const L=F.list||[];h=`<div class="card pop"><h3>First-time registration fee</h3><input id="rg" type="number" placeholder="Registration fee ₹" value="${F.reg??""}"><button class="btn" data-a="savereg">Save registration fee</button></div><div class="card pop"><h3>Add class fee</h3><div class="row"><input id="fcn" placeholder="Class (e.g. Class 10)"><input id="fcf" type="number" placeholder="Fee ₹"></div><button class="btn" data-a="addcls">Add class</button></div>`+L.map((x,i)=>`<div class="card pop"><b>${esc(x.c)}</b><div class="row" style="margin-top:8px"><input id="cf_${i}" type="number" value="${+x.f||0}"><div><button class="ghost" data-a="savecls" data-i="${i}">Save</button> <button class="ghost" data-a="delcls" data-i="${i}">Delete</button></div></div></div>`).join("")}
+    if(tab=="c")h=`<div class="card pop"><h3>Support contact</h3><small>Parents can call or WhatsApp this number. Include the country code, e.g. 919876543210.</small><input id="cp" placeholder="Phone number" value="${esc(C.phone)}"><h3>YouTube channel</h3><small>Channel ID (starts with UC). All your uploads appear in the parents' video gallery.</small><input id="cy" placeholder="UCxxxxxxxxxxxxxxxxxxxxxx" value="${esc(C.yt||YT)}"><label class="chk"><input id="cl" type="checkbox" ${C.live?"checked":""} style="width:auto;margin:0 10px 0 0">Live class is on now</label><button class="btn" data-a="savec">Save settings</button></div><div class="card pop"><h3>Payment QR code</h3><p><small>Upload your payment QR. Parents see it when they tap Pay.</small></p>${C.qr?`<img class="qr" src="${C.qr}" alt="QR">`:`<p><small>No QR uploaded yet.</small></p>`}<br><input id="qf" type="file" accept="image/*"></div>`;
+    root.innerHTML=`<header><button class="ghost" data-a="menu">☰</button><img class="lg" src="logo.png" alt=""><b>${M.find(x=>x[0]==tab)[1]}</b><span class="tag">Admin</span></header><div class="ov ${open?"on":""}" data-a="menu"></div><aside class="side ${open?"on":""}">${M.map(([k,l,i])=>`<button class="${tab==k?"on":""}" data-a="go" data-k="${k}">${i} ${l}${k=="p"&&claims.length?` (${claims.length})`:""}</button>`).join("")}<button data-a="out">🚪 Logout</button></aside><main>${h}</main>`;
   };
   unsubs.push(onSnapshot(collection(db,"students"),s=>{S=s.docs.map(d=>({id:d.id,...d.data()}));draw()},e=>toast("Could not load data: "+e.code)));
   unsubs.push(onSnapshot(query(collection(db,"notices"),orderBy("ts","desc")),s=>{N=s.docs.map(d=>({id:d.id,...d.data()}));draw()}));
   unsubs.push(onSnapshot(collection(db,"payments"),s=>{P=s.docs.map(d=>({id:d.id,...d.data()}));draw()}));
+  unsubs.push(onSnapshot(doc(db,"config","fees"),d=>{F=d.data()||{};draw()}));
+  unsubs.push(onSnapshot(collection(db,"videos"),q=>{V=q.docs.map(d=>({id:d.id,...d.data()}));draw()}));
+  unsubs.push(onSnapshot(collection(db,"homework"),q=>{H=q.docs.map(d=>({id:d.id,...d.data()}));draw()}));
   unsubs.push(onSnapshot(doc(db,"config","pay"),d=>{C=d.data()||{};draw()}));
   acts.menu=()=>{open=!open;draw()};
   acts.go=d=>{tab=d.k;open=false;draw()};
   acts.add=async()=>{const name=val("fn"),cls=val("fc"),pe=val("fe").toLowerCase(),pending=+val("ff");
     if(!name||!/^\S+@\S+\.\S+$/.test(pe)||isNaN(pending))return toast("Enter name, a valid Gmail and pending fees");
     await addDoc(collection(db,"students"),{name,cls,parentEmail:pe,pending,paid:0,adm:val("fd")||today(),address:"",att:{},tests:[],ts:serverTimestamp()});toast("Student saved");tab="s";draw()};
-  acts.edit=d=>{const s=find(d.id),v=prompt("Pending amount (₹)",s.pending||0);if(v===null||isNaN(v)||v==="")return;updateDoc(R(d.id),{pending:+v});toast("Pending updated")};
-  acts.paid=d=>{const s=find(d.id),v=prompt("Amount received (₹)",s.pending||0);if(v===null||isNaN(v)||+v<=0)return;const a=+v;updateDoc(R(d.id),{pending:Math.max(0,(+s.pending||0)-a),paid:(+s.paid||0)+a});toast("Marked as paid")};
+  acts.edit=d=>{const v=val("pe_"+d.id);if(v===""||isNaN(v))return toast("Enter a valid amount");updateDoc(R(d.id),{pending:+v});toast("Pending updated")};
+  acts.paid=d=>{const s=find(d.id),a=+val("rc_"+d.id);if(!(a>0))return toast("Enter the amount received");updateDoc(R(d.id),{pending:Math.max(0,(+s.pending||0)-a),paid:(+s.paid||0)+a});toast("Marked as paid")};
+  acts.savec=async()=>{await setDoc(doc(db,"config","pay"),{phone:val("cp").replace(/\D/g,""),yt:val("cy")||YT,live:!!document.getElementById("cl")?.checked},{merge:true});toast("Settings saved")};
+  acts.addv=async()=>{const m=val("vl").match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([\w-]{11})/);if(!m)return toast("Paste a valid YouTube video link");await addDoc(collection(db,"videos"),{vid:m[1],t:val("vt")||"Video",ts:serverTimestamp()});toast("Video added")};
+  const sf=o=>setDoc(doc(db,"config","fees"),o,{merge:true});
+  acts.savereg=async()=>{const v=val("rg");if(v===""||isNaN(v))return toast("Enter a valid amount");await sf({reg:+v});toast("Registration fee saved")};
+  acts.addcls=async()=>{const c=val("fcn"),f=val("fcf");if(!c||f===""||isNaN(f))return toast("Enter the class and its fee");await sf({list:[...(F.list||[]),{c,f:+f}]});toast("Class added")};
+  acts.savecls=async d=>{const v=val("cf_"+d.i);if(v===""||isNaN(v))return toast("Enter a valid amount");const L=[...(F.list||[])];L[+d.i]={...L[+d.i],f:+v};await sf({list:L});toast("Fee updated")};
+  acts.delcls=async d=>{if(!confirm("Remove this class fee?"))return;await sf({list:(F.list||[]).filter((_,i)=>i!=+d.i)});toast("Removed")};
+  acts.delv=d=>deleteDoc(doc(db,"videos",d.id));
+  acts.addh=async()=>{const t=val("ht");if(!t)return toast("Write the homework first");await addDoc(collection(db,"homework"),{cls:val("hc")||"All",t,ts:serverTimestamp()});toast("Homework posted")};
+  acts.delh=d=>deleteDoc(doc(db,"homework",d.id));
   acts.att=d=>updateDoc(R(d.id),{["att."+today()]:d.v});
   acts.test=d=>{const p=(prompt("Test name, marks, out of (example: Unit1,42,50)")||"").split(",");
     if(p.length<3||isNaN(p[1])||isNaN(p[2]))return;updateDoc(R(d.id),{tests:arrayUnion({n:p[0].trim(),m:+p[1],x:+p[2],d:today()})});toast("Test added")};
@@ -166,26 +236,43 @@ function adminView(){
 }
 
 function parentView(u,em){
-  let S=[],N=[],P=[],C={},pay=null;
+  let S=[],N=[],P=[],V=[],H=[],F={},C={},pay=null,play=null,pg="h";
   const draw=()=>{
-    let h=`<h3 class="pop" style="font-size:22px">Welcome, ${esc((u.displayName||"").split(" ")[0])}</h3>`;
-    h+=S.length?S.map(s=>{const t=(s.tests||[]).slice(-3).reverse(),l=t[0],wait=P.some(p=>p.sid==s.id&&p.status=="pending");
-      return `<div class="card pop"><div class="top"><div><b style="font-size:18px">${esc(s.name)}</b><br><small>${esc(s.cls)} · attendance</small></div>${ring(pct(s.att))}</div>
-      ${l?`<p style="margin-top:10px"><small>Last test: ${esc(l.n)}</small> <b>${l.m}/${l.x}</b></p><div class="bar"><span style="width:${Math.round(l.m*100/l.x)}%"></span></div>`:`<p style="margin-top:10px"><small>No test reports yet.</small></p>`}
-      ${t.slice(1).map(x=>`<small>${esc(x.n)}: ${x.m}/${x.x}</small><br>`).join("")}
-      <div class="two"><div class="box"><small>Pending</small><b style="color:var(--bad)">${money(s.pending)}</b></div><div class="box"><small>Paid</small><b style="color:var(--ok)">${money(s.paid)}</b></div></div>
-      <div style="margin-top:10px">${+s.pending>0?(wait?`<small>Payment sent. Waiting for confirmation.</small>`:`<button class="btn" data-a="pay" data-id="${s.id}">Pay ${money(s.pending)}</button>`):`<small>All fees are paid. Thank you!</small>`}</div>
-      <div style="margin-top:12px"><small class="dt">Student address</small><input id="ad_${s.id}" placeholder="Enter address" value="${esc(s.address)}"><button class="ghost" data-a="addr" data-id="${s.id}">Save address</button></div></div>`}).join(""):
-      `<div class="empty">This Gmail (${esc(em)}) is not linked to any student yet.<br>Ask your teacher to add this Gmail.</div>`;
-    if(N.length)h+=`<h3 style="margin-top:18px">Notices</h3>`+N.map(n=>`<div class="note pop">${esc(n.t)}</div>`).join("");
+    let h="";
+    if(pg=="h"){
+      h=`<h3 class="pop" style="font-size:22px">Welcome, ${esc((u.displayName||"").split(" ")[0])}</h3>`+(C.live?`<div class="note pop" data-a="pg" data-k="v" style="cursor:pointer">🔴 Live class is on now. Tap to watch.</div>`:"");
+      h+=S.length?S.map(s=>{const t=(s.tests||[]).slice(-3).reverse(),l=t[0],wait=P.some(p=>p.sid==s.id&&p.status=="pending");
+        return `<div class="card pop"><div class="top"><div><b style="font-size:18px">${esc(s.name)}</b><br><small>${esc(s.cls)} · attendance</small></div>${ring(pct(s.att))}</div>
+        ${l?`<p style="margin-top:10px"><small>Last test: ${esc(l.n)}</small> <b>${l.m}/${l.x}</b></p><div class="bar"><span style="width:${Math.round(l.m*100/l.x)}%"></span></div>`:`<p style="margin-top:10px"><small>No test reports yet.</small></p>`}
+        ${t.slice(1).map(x=>`<small>${esc(x.n)}: ${x.m}/${x.x}</small><br>`).join("")}
+        <div class="two"><div class="box"><small>Pending</small><b style="color:var(--bad)">${money(s.pending)}</b></div><div class="box"><small>Paid</small><b style="color:var(--ok)">${money(s.paid)}</b></div></div>
+        <div style="margin-top:10px">${+s.pending>0?(wait?`<small>Payment sent. Waiting for confirmation.</small>`:`<button class="btn" data-a="pay" data-id="${s.id}">Pay ${money(s.pending)}</button>`):`<small>All fees are paid. Thank you!</small>`}</div>
+        <div style="margin-top:12px"><small class="dt">Student address</small><input id="ad_${s.id}" placeholder="Enter address" value="${esc(s.address)}"><button class="ghost" data-a="addr" data-id="${s.id}">Save address</button></div></div>`}).join(""):
+        `<div class="empty">This Gmail (${esc(em)}) is not linked to any student yet.<br>Ask your teacher to add this Gmail.</div>`;
+      const cl=S.map(s=>(s.cls||"").toLowerCase()),hw=H.filter(x=>(x.cls||"").toLowerCase()=="all"||cl.includes((x.cls||"").toLowerCase())).sort(byTs);
+      if(hw.length)h+=`<h3 style="margin-top:18px">Homework</h3>`+hw.map(x=>`<div class="note pop"><small>${esc(x.cls)}</small><br>${esc(x.t)}</div>`).join("");
+      if(N.length)h+=`<h3 style="margin-top:18px">Notices</h3>`+N.map(n=>`<div class="note pop">${esc(n.t)}</div>`).join("");
+    }
+    if(pg=="v"){
+      h=`<h3 class="pop">Video gallery</h3>`+(C.live?`<div class="card pop"><b>🔴 Live now</b><br><br><iframe src="https://www.youtube-nocookie.com/embed/live_stream?channel=${esc(C.yt||YT)}&autoplay=1" allow="autoplay;encrypted-media;fullscreen" allowfullscreen></iframe></div>`:"")+`<h3>Latest videos</h3><div class="card pop"><iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=UU${esc((C.yt||YT).slice(2))}" allowfullscreen></iframe></div>`+(V.length?`<h3>More videos</h3>`:"")+[...V].sort(byTs).map(v=>`<div class="card pop"><div class="vid" data-a="play" data-id="${esc(v.vid)}"><img src="https://img.youtube.com/vi/${esc(v.vid)}/hqdefault.jpg" alt=""></div><p style="margin-top:8px"><b>${esc(v.t)}</b></p></div>`).join("");
+    }
+    if(pg=="i"){const L=F.list||[];h=`<h3 class="pop">Fee structure</h3><div class="card pop"><small>First-time registration fee</small><div class="pay">${F.reg!=null&&F.reg!==""?money(F.reg):"Not added yet"}</div></div>`+(L.length?`<div class="card pop"><h3>Fee by class</h3>${L.map(x=>`<div class="top" style="padding:8px 0;border-bottom:1px dashed var(--line)"><span>${esc(x.c)}</span><b>${money(x.f)}</b></div>`).join("")}</div>`:`<div class="empty">Class fees have not been added yet.</div>`)}
+    if(pg=="s")h=`<h3 class="pop">Support</h3><div class="card pop"><p>Need help with fees, attendance or anything else? Contact your teacher.</p>${C.phone?`<a class="btn lnk" href="https://wa.me/${esc(C.phone)}" target="_blank">Chat on WhatsApp</a><a class="ghost lnk" href="tel:+${esc(C.phone)}">Call</a>`:`<br><small>Support details have not been added yet.</small>`}<a class="ghost lnk" href="${IG}" target="_blank">Instagram</a><a class="ghost lnk" href="${YTURL}" target="_blank">YouTube channel</a></div>`;
     const s=S.find(x=>x.id==pay);
     if(s)h+=`<div class="modal"><div class="card"><h3>Pay ${money(s.pending)}</h3>${C.qr?`<img src="${C.qr}" alt="Payment QR">`:`<p>The QR code is not available yet. Please contact your teacher.</p>`}<p><small>Scan with any UPI app and pay. After paying, choose:</small></p><div class="row"><button class="btn" data-a="done">Payment done</button><button class="ghost" data-a="notdone">Not done</button></div></div></div>`;
-    shell("Parent",h);
+    if(play)h+=`<div class="modal" data-a="stop"><div class="card" style="max-width:560px"><iframe src="https://www.youtube-nocookie.com/embed/${esc(play)}?autoplay=1" allow="autoplay;encrypted-media;fullscreen" allowfullscreen></iframe><br><br><button class="ghost" data-a="stop">Close</button></div></div>`;
+    root.innerHTML=`<header><img class="lg" src="logo.png" alt=""><b>Topper's Hub</b><span class="tag">Parent</span><button class="ghost" data-a="out">Logout</button></header><main>${h}</main><div class="tb">${[["h","🏠 Home"],["v","🎬 Videos"],["i","🏷 Fees"],["s","💬 Support"]].map(([k,l])=>`<button class="${pg==k?"on":""}" data-a="pg" data-k="${k}">${l}</button>`).join("")}</div>`;
   };
-  unsubs.push(onSnapshot(query(collection(db,"students"),where("parentEmail","==",em)),s=>{S=s.docs.map(d=>({id:d.id,...d.data()}));draw()},e=>toast("Could not load data: "+e.code)));
-  unsubs.push(onSnapshot(query(collection(db,"payments"),where("parentEmail","==",em)),s=>{P=s.docs.map(d=>({id:d.id,...d.data()}));draw()}));
-  unsubs.push(onSnapshot(query(collection(db,"notices"),orderBy("ts","desc")),s=>{N=s.docs.map(d=>({id:d.id,...d.data()}));draw()}));
+  const L=(c,f,w)=>unsubs.push(onSnapshot(w||collection(db,c),q=>{f(q.docs.map(d=>({id:d.id,...d.data()})));draw()}));
+  unsubs.push(onSnapshot(query(collection(db,"students"),where("parentEmail","==",em)),q=>{S=q.docs.map(d=>({id:d.id,...d.data()}));draw()},e=>toast("Could not load data: "+e.code)));
+  L("payments",x=>P=x,query(collection(db,"payments"),where("parentEmail","==",em)));
+  L("notices",x=>N=x,query(collection(db,"notices"),orderBy("ts","desc")));
+  L("videos",x=>V=x);L("homework",x=>H=x);
+  unsubs.push(onSnapshot(doc(db,"config","fees"),d=>{F=d.data()||{};draw()}));
   unsubs.push(onSnapshot(doc(db,"config","pay"),d=>{C=d.data()||{};draw()}));
+  acts.pg=d=>{pg=d.k;draw()};
+  acts.play=d=>{play=d.id;draw()};
+  acts.stop=()=>{play=null;draw()};
   acts.addr=async d=>{try{await updateDoc(doc(db,"students",d.id),{address:val("ad_"+d.id)});toast("Address saved")}catch(e){toast("Could not save address")}};
   acts.pay=d=>{pay=d.id;draw()};
   acts.notdone=()=>{pay=null;draw()};
