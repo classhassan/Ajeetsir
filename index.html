@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ajeet Sir Tuition</title>
+<style>
+:root{--bg:#0f3d3a;--card:#17504a;--line:#2a6b63;--ink:#f4f7f2;--mut:#a9cdc5;--chalk:#ffd84d;--ok:#7be0a6;--bad:#ff7a6b}
+*{box-sizing:border-box;margin:0;font-family:"Trebuchet MS","Segoe UI",system-ui,sans-serif}
+body{background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden}
+button,input,textarea{font:inherit;color:inherit}
+header{display:flex;align-items:center;gap:10px;padding:14px 16px;background:#0b2f2c;position:sticky;top:0;z-index:5;animation:drop .5s}
+header b{flex:1;font-size:18px;letter-spacing:.3px}
+.tag{background:var(--chalk);color:#243;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:700}
+main{max-width:720px;margin:0 auto;padding:14px 14px 60px}
+nav{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto}
+nav button{flex:1;white-space:nowrap;padding:10px 12px;border:2px dashed var(--line);background:none;border-radius:12px;cursor:pointer;transition:.25s}
+nav button.on{background:var(--chalk);color:#243;border:2px solid var(--chalk);transform:translateY(-2px)}
+.card{background:var(--card);border-radius:16px;padding:14px;margin-bottom:12px;border:1px solid var(--line)}
+.pop{animation:pop .45s cubic-bezier(.2,1.4,.4,1) backwards}
+.pop:nth-child(2){animation-delay:.05s}.pop:nth-child(3){animation-delay:.1s}.pop:nth-child(4){animation-delay:.15s}.pop:nth-child(n+5){animation-delay:.2s}
+h3{margin-bottom:10px;color:var(--chalk)}
+input,textarea{width:100%;padding:11px;border-radius:10px;border:1px solid var(--line);background:#0e3532;margin-bottom:8px;outline:none;transition:.2s}
+input:focus,textarea:focus{border-color:var(--chalk);box-shadow:0 0 0 3px #ffd84d33}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:0 8px}
+.btn{width:100%;padding:12px;border:0;border-radius:12px;background:var(--chalk);color:#243;font-weight:700;cursor:pointer;transition:.2s}
+.btn:active{transform:scale(.96)}
+.ghost{background:none;border:1px solid var(--line);border-radius:10px;padding:7px 11px;cursor:pointer;transition:.2s}
+.ghost:hover{border-color:var(--chalk)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.stats div{background:var(--card);border-radius:14px;padding:12px;text-align:center;font-size:12px;color:var(--mut);animation:pop .5s backwards}
+.stats i{display:block;font-style:normal;font-size:22px;font-weight:800;color:var(--ink)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+small{color:var(--mut)}
+.ring{width:62px;height:62px;flex:none}
+.rp{animation:dash 1.3s ease-out}
+.row2{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+.chip{border:0;border-radius:99px;padding:8px 14px;font-weight:700;cursor:pointer;color:#243;transition:.2s}
+.chip.g{background:var(--ok)}.chip.r{background:var(--bad)}
+.pa{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:none;margin-left:5px;cursor:pointer;font-weight:700;transition:.2s}
+.pa.g{background:var(--ok);color:#243}.pa.r{background:var(--bad);color:#243;animation:shake .35s}
+.bar{height:10px;border-radius:9px;background:#0e3532;overflow:hidden;margin:6px 0}
+.bar span{display:block;height:100%;background:var(--chalk);border-radius:9px;animation:grow 1s ease-out}
+.note{border-left:4px solid var(--chalk);padding:6px 10px;margin-bottom:8px;background:#0e3532;border-radius:0 10px 10px 0}
+.pay{font-size:20px;font-weight:800;margin:6px 0 10px}
+.empty{text-align:center;padding:30px 10px;color:var(--mut)}
+#login{min-height:100vh;display:grid;place-items:center;padding:20px;position:relative;overflow:hidden}
+.blob{position:absolute;border-radius:50%;filter:blur(50px);opacity:.5;animation:float 9s ease-in-out infinite}
+.login{position:relative;text-align:center;max-width:340px;animation:pop .7s cubic-bezier(.2,1.4,.4,1)}
+.login h1{font-size:34px;margin:10px 0 6px;color:var(--chalk)}
+.login p{color:var(--mut);margin-bottom:22px}
+.gbtn{display:flex;gap:10px;justify-content:center;align-items:center;width:100%;padding:14px;border:0;border-radius:14px;background:#fff;color:#222;font-weight:700;cursor:pointer;transition:.2s}
+.gbtn:hover{transform:translateY(-3px);box-shadow:0 10px 24px #0006}
+#toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,90px);background:#fff;color:#222;padding:11px 18px;border-radius:12px;transition:.35s;z-index:9;font-weight:600}
+#toast.on{transform:translate(-50%,0)}
+@keyframes pop{from{opacity:0;transform:translateY(18px) scale(.96)}}
+@keyframes drop{from{transform:translateY(-60px)}}
+@keyframes dash{from{stroke-dasharray:0 100}}
+@keyframes grow{from{width:0}}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+@keyframes float{50%{transform:translate(30px,-40px) scale(1.15)}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media(max-width:420px){.row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast"></div>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import{getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import{getFirestore,collection,doc,addDoc,setDoc,updateDoc,deleteDoc,onSnapshot,query,where,orderBy,arrayUnion,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// 1) Yahan apna admin Gmail likhein (Firestore rules me bhi wahi likhna hai)
+const ADMINS=["YOUR_GMAIL@gmail.com"];
+
+const app=initializeApp({
+  apiKey:"AIzaSyBH-59V78CiFn4FNvtTsCUmX-HRyQUTt4s",
+  authDomain:"ajeetsir.firebaseapp.com",
+  projectId:"ajeetsir",
+  storageBucket:"ajeetsir.firebasestorage.app",
+  messagingSenderId:"34997095962",
+  appId:"1:34997095962:web:da64694f3baf7540258ba3"
+});
+const auth=getAuth(app),db=getFirestore(app);
+const root=document.getElementById("app");
+let unsubs=[],acts={};
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const today=()=>new Date().toISOString().slice(0,10);
+const pct=a=>{const v=Object.values(a||{});return v.length?Math.round(v.filter(x=>x=="P").length*100/v.length):0};
+const val=id=>document.getElementById(id)?.value.trim()||"";
+function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("on");setTimeout(()=>t.classList.remove("on"),2400)}
+const ring=p=>`<svg class="ring" viewBox="0 0 36 36"><path d="M18 2a16 16 0 1 1 0 32a16 16 0 1 1 0-32" fill="none" stroke="#0e3532" stroke-width="3"/><path class="rp" pathLength="100" d="M18 2a16 16 0 1 1 0 32a16 16 0 1 1 0-32" fill="none" stroke="#7be0a6" stroke-width="3" stroke-linecap="round" stroke-dasharray="${p} 100"/><text x="18" y="20.5" text-anchor="middle" fill="#fff" font-size="8" font-weight="700">${p}%</text></svg>`;
+const shell=(role,body)=>{root.innerHTML=`<header><b>🎓 Ajeet Sir Tuition</b><span class="tag">${role}</span><button class="ghost" data-a="out">Logout</button></header><main>${body}</main>`};
+root.addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(b&&acts[b.dataset.a])acts[b.dataset.a](b.dataset)});
+acts.out=()=>signOut(auth);
+
+function loginView(){
+  unsubs.forEach(f=>f());unsubs=[];
+  root.innerHTML=`<div id="login"><div class="blob" style="width:260px;height:260px;background:#ffd84d;top:-60px;left:-70px"></div><div class="blob" style="width:300px;height:300px;background:#2ec4a0;bottom:-90px;right:-90px;animation-delay:-4s"></div>
+  <div class="login"><div style="font-size:56px">📚</div><h1>Ajeet Sir Tuition</h1><p>Fees, attendance aur test report — sab ek jagah. Apne Gmail se login karein.</p>
+  <button class="gbtn" data-a="g"><svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.6 5.9c4.4-4.1 7-10.1 7-17.6z"/><path fill="#FBBC05" d="M10.5 28.7A14.500 14.500 0 0 1 9.500 24c0-1.600.3-3.200.8-4.700l-7.900-6.100A24 24 0 0 0 0 24c0 3.900.9 7.500 2.600 10.800l7.900-6.100z"/><path fill="#34A853" d="M24 48c6.500 0 11.900-2.100 15.900-5.800l-7.600-5.900c-2.100 1.400-4.900 2.300-8.300 2.300-6.300 0-11.600-4.100-13.500-9.800l-7.900 6.100C6.500 42.600 14.600 48 24 48z"/></svg>Google se login karein</button></div></div>`;
+}
+acts.g=async()=>{try{await signInWithPopup(auth,new GoogleAuthProvider())}catch(e){toast("Login nahi hua: "+(e.code||e.message))}};
+
+onAuthStateChanged(auth,u=>{
+  unsubs.forEach(f=>f());unsubs=[];
+  if(!u)return loginView();
+  const em=(u.email||"").toLowerCase();
+  ADMINS.map(x=>x.toLowerCase()).includes(em)?adminView():parentView(u,em);
+});
+
+function adminView(){
+  let S=[],N=[],C={},tab="s";
+  const card=s=>`<div class="card pop"><div class="top"><div><b>${esc(s.name)}</b> <small>· ${esc(s.cls)}</small><br><small>${esc(s.parentEmail)}</small></div>${ring(pct(s.att))}</div>
+  <div class="row2"><button class="chip ${s.due?"r":"g"}" data-a="fee" data-id="${s.id}">₹${s.fee} ${s.due?"Due":"Paid ✓"}</button>
+  <span>Aaj <button class="pa ${s.att?.[today()]=="P"?"g":""}" data-a="att" data-id="${s.id}" data-v="P">P</button><button class="pa ${s.att?.[today()]=="A"?"r":""}" data-a="att" data-id="${s.id}" data-v="A">A</button></span>
+  <button class="ghost" data-a="test" data-id="${s.id}">+ Test</button><button class="ghost" data-a="del" data-id="${s.id}">🗑</button></div></div>`;
+  const draw=()=>{
+    const due=S.filter(s=>s.due).reduce((a,s)=>a+ +s.fee,0),got=S.filter(s=>!s.due).reduce((a,s)=>a+ +s.fee,0);
+    let h=`<nav>${[["s","👩‍🎓 Students"],["n","📢 Notices"],["c","⚙️ Settings"]].map(([k,l])=>`<button class="${tab==k?"on":""}" data-a="tab" data-k="${k}">${l}</button>`).join("")}</nav>`;
+    if(tab=="s")h+=`<div class="stats"><div><i>${S.length}</i>Students</div><div><i style="color:var(--bad)">₹${due}</i>Pending</div><div><i style="color:var(--ok)">₹${got}</i>Paid</div></div>
+    <div class="card pop"><h3>Naya student</h3><div class="row"><input id="fn" placeholder="Naam"><input id="fc" placeholder="Class"><input id="fe" type="email" placeholder="Parent ka Gmail"><input id="ff" type="number" placeholder="Monthly fees ₹"></div><button class="btn" data-a="add">+ Student jodein</button></div>`+(S.length?S.map(card).join(""):`<div class="empty">Abhi koi student nahi. Upar se pehla student jodein.</div>`);
+    if(tab=="n")h+=`<div class="card pop"><h3>Sabko notice bhejein</h3><textarea id="nt" rows="3" placeholder="Jaise: Kal chhutti rahegi"></textarea><button class="btn" data-a="post">Notice bhejein</button></div>`+N.map(n=>`<div class="card pop"><div class="top"><span>${esc(n.t)}</span><button class="ghost" data-a="deln" data-id="${n.id}">🗑</button></div></div>`).join("");
+    if(tab=="c")h+=`<div class="card pop"><h3>Payment settings (PayU)</h3><input id="cl" placeholder="PayU payment link" value="${esc(C.link)}"><input id="cu" placeholder="UPI ID (optional)" value="${esc(C.upi)}"><input id="ck" placeholder="PayU Merchant Key" value="${esc(C.key)}"><small>Salt yahan kabhi na daalein — wo sirf server par rakha jaata hai.</small><br><br><button class="btn" data-a="save">Save karein</button></div>`;
+    shell("Admin",h);
+  };
+  const R=(id)=>doc(db,"students",id);
+  unsubs.push(onSnapshot(collection(db,"students"),s=>{S=s.docs.map(d=>({id:d.id,...d.data()}));draw()},e=>toast("Data nahi aaya: "+e.code)));
+  unsubs.push(onSnapshot(query(collection(db,"notices"),orderBy("ts","desc")),s=>{N=s.docs.map(d=>({id:d.id,...d.data()}));if(tab=="n")draw()}));
+  unsubs.push(onSnapshot(doc(db,"config","pay"),d=>{C=d.data()||{};if(tab=="c")draw()}));
+  acts.tab=d=>{tab=d.k;draw()};
+  acts.add=async()=>{const name=val("fn"),cls=val("fc"),pe=val("fe").toLowerCase(),fee=+val("ff");
+    if(!name||!/^\S+@\S+\.\S+$/.test(pe)||!fee)return toast("Naam, sahi Gmail aur fees bharein");
+    await addDoc(collection(db,"students"),{name,cls,parentEmail:pe,fee,due:true,att:{},tests:[],ts:serverTimestamp()});toast("Student jud gaya")};
+  acts.fee=d=>updateDoc(R(d.id),{due:!S.find(x=>x.id==d.id).due});
+  acts.att=d=>updateDoc(R(d.id),{["att."+today()]:d.v});
+  acts.test=d=>{const p=(prompt("Test naam, marks, kitne me se (jaise: Unit1,42,50)")||"").split(",");
+    if(p.length<3||isNaN(p[1])||isNaN(p[2]))return;updateDoc(R(d.id),{tests:arrayUnion({n:p[0].trim(),m:+p[1],x:+p[2],d:today()})});toast("Test jud gaya")};
+  acts.del=d=>confirm("Is student ko hatayein?")&&deleteDoc(R(d.id));
+  acts.post=async()=>{const t=val("nt");if(!t)return toast("Notice likhein");await addDoc(collection(db,"notices"),{t,ts:serverTimestamp()});toast("Notice bhej diya")};
+  acts.deln=d=>deleteDoc(doc(db,"notices",d.id));
+  acts.save=async()=>{await setDoc(doc(db,"config","pay"),{link:val("cl"),upi:val("cu"),key:val("ck")});toast("Save ho gaya")};
+}
+
+function parentView(u,em){
+  let S=[],N=[],C={};
+  const draw=()=>{
+    let h=`<h3 class="pop" style="font-size:22px">Namaste, ${esc((u.displayName||"").split(" ")[0])} 👋</h3>`;
+    h+=S.length?S.map(s=>{const t=(s.tests||[]).slice(-3).reverse(),l=t[0];
+      return `<div class="card pop"><div class="top"><div><b style="font-size:18px">${esc(s.name)}</b><br><small>${esc(s.cls)} · attendance</small></div>${ring(pct(s.att))}</div>
+      ${l?`<p style="margin-top:10px"><small>Last test: ${esc(l.n)}</small> <b>${l.m}/${l.x}</b></p><div class="bar"><span style="width:${Math.round(l.m*100/l.x)}%"></span></div>`:`<p style="margin-top:10px"><small>Abhi koi test report nahi.</small></p>`}
+      ${t.slice(1).map(x=>`<small>${esc(x.n)}: ${x.m}/${x.x}</small><br>`).join("")}
+      <div class="card" style="margin:12px 0 0;background:#0e3532"><small>Fees</small><div class="pay">₹${s.fee} ${s.due?`<span style="color:var(--bad)">baaki</span>`:`<span style="color:var(--ok)">jama ✓</span>`}</div>
+      ${s.due?`<button class="btn" data-a="pay">Fees bharein</button>`:`<small>Dhanyavaad! Is mahine ki fees mil gayi.</small>`}</div></div>`}).join(""):
+      `<div class="empty">Ye Gmail (${esc(em)}) abhi kisi bachche se juda nahi hai.<br>Sir se kahein ki ye Gmail add kar dein.</div>`;
+    if(N.length)h+=`<h3 style="margin-top:18px">📢 Sir ke notice</h3>`+N.map(n=>`<div class="note pop">${esc(n.t)}</div>`).join("");
+    shell("Parent",h);
+  };
+  unsubs.push(onSnapshot(query(collection(db,"students"),where("parentEmail","==",em)),s=>{S=s.docs.map(d=>({id:d.id,...d.data()}));draw()},e=>toast("Data nahi aaya: "+e.code)));
+  unsubs.push(onSnapshot(query(collection(db,"notices"),orderBy("ts","desc")),s=>{N=s.docs.map(d=>({id:d.id,...d.data()}));draw()}));
+  unsubs.push(onSnapshot(doc(db,"config","pay"),d=>{C=d.data()||{}}));
+  acts.pay=()=>{if(C.link)window.open(C.link,"_blank");else if(C.upi)alert("UPI ID: "+C.upi);else toast("Sir se payment link maangein")};
+}
+</script>
+</body>
+</html>
