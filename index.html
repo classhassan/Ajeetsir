@@ -141,6 +141,11 @@ const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&g
 const dstr=n=>new Date(Date.now()-n*864e5-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);
 const today=()=>dstr(0);
 const money=n=>"₹"+(+n||0).toLocaleString("en-IN");
+let F={},FM=null;
+const fee=s=>{const x=(F.list||[]).find(y=>String(y.c).trim().toLowerCase()==String(s.cls||"").trim().toLowerCase());return x?+x.f:0};
+const nm=m=>{const[y,o]=m.split("-").map(Number);return o==12?`${y+1}-01`:`${y}-${String(o+1).padStart(2,"0")}`};
+const mname=m=>new Date(m+"-15").toLocaleString("en",{month:"short",year:"numeric"});
+const cal=s=>{const f=fee(s),cur=today().slice(0,7),rows=[];let m=(s.adm||today()).slice(0,7);while(m<=cur){const p=+(s.pm?.[m])||0;rows.push({m,due:f,paid:p,pend:Math.max(0,f-p)});m=nm(m)}return{f,rows,pend:rows.reduce((a,r)=>a+r.pend,0),paid:Object.values(s.pm||{}).reduce((a,v)=>a+(+v||0),0),np:rows.filter(r=>r.pend>0).length}};
 const pct=a=>{const v=Object.values(a||{});return v.length?Math.round(v.filter(x=>x=="P").length*100/v.length):0};
 const val=id=>document.getElementById(id)?.value.trim()||"";
 const byTs=(a,b)=>(b.ts?.seconds||9e9)-(a.ts?.seconds||9e9);
@@ -149,7 +154,7 @@ const ring=p=>`<svg class="ring" viewBox="0 0 36 36"><path d="M18 2a16 16 0 1 1 
 const shell=(role,body)=>{root.innerHTML=`<header><img class="lg" src="logo.png" alt=""><b>Topper's Hub</b><span class="tag">${role}</span><button class="ghost" data-a="out">Logout</button></header><main>${body}</main>`};
 const toQR=f=>new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>{const k=Math.min(1,500/Math.max(i.width,i.height)),c=document.createElement("canvas");c.width=i.width*k;c.height=i.height*k;const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(i,0,0,c.width,c.height);ok(c.toDataURL("image/jpeg",.85))};i.onerror=no;i.src=r.result};r.readAsDataURL(f)});
 document.addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(b&&acts[b.dataset.a])acts[b.dataset.a](b.dataset)});
-root.addEventListener("change",async e=>{if(e.target.id!="qf"||!e.target.files[0])return;try{await setDoc(doc(db,"config","pay"),{qr:await toQR(e.target.files[0])},{merge:true});toast("QR code saved")}catch(x){toast("Could not save QR")}});
+root.addEventListener("change",async e=>{if(e.target.id=="fm"){FM=e.target.value||null;acts.redraw?.();return}if(e.target.id!="qf"||!e.target.files[0])return;try{await setDoc(doc(db,"config","pay"),{qr:await toQR(e.target.files[0])},{merge:true});toast("QR code saved")}catch(x){toast("Could not save QR")}});
 root.addEventListener("input",e=>{if(e.target.id!="q")return;const v=e.target.value.toLowerCase();root.querySelectorAll(".sc").forEach(c=>c.style.display=c.textContent.toLowerCase().includes(v)?"":"none")});
 acts.out=()=>signOut(auth);
 const inst=document.getElementById("inst");let ip=null;
@@ -177,44 +182,53 @@ onAuthStateChanged(auth,u=>{
 });
 
 function adminView(){
-  let S=[],N=[],P=[],V=[],H=[],F={},C={},tab="d",open=false;
+  let S=[],N=[],P=[],V=[],H=[],AP=[],C={},tab="d",open=false;
   const R=id=>doc(db,"students",id),find=id=>S.find(x=>x.id==id);
-  const M=[["d","Dashboard","📊"],["add","Add student","➕"],["s","Students","👩‍🎓"],["att","Attendance","✅"],["f","Fees","💰"],["a","Admissions","🗓"],["t","Tests","📝"],["h","Homework","📚"],["v","Videos","🎬"],["fs","Fee structure","🏷"],["p","Payments","💳"],["n","Notices","📢"],["c","Settings","⚙️"]];
+  const M=[["d","Dashboard","📊"],["add","Add student","➕"],["ap","Applications","📩"],["s","Students","👩‍🎓"],["att","Attendance","✅"],["f","Fees","💰"],["a","Admissions","🗓"],["t","Tests","📝"],["h","Homework","📚"],["v","Videos","🎬"],["fs","Fee structure","🏷"],["p","Payments","💳"],["n","Notices","📢"],["c","Settings","⚙️"]];
   const pa=s=>`<span><button class="pa ${s.att?.[today()]=="P"?"g":""}" data-a="att" data-id="${s.id}" data-v="P">P</button><button class="pa ${s.att?.[today()]=="A"?"r":""}" data-a="att" data-id="${s.id}" data-v="A">A</button></span>`;
   const draw=()=>{
-    const pend=S.reduce((x,s)=>x+(+s.pending||0),0),got=S.reduce((x,s)=>x+(+s.paid||0),0),claims=P.filter(p=>p.status=="pending");
+    const pend=S.reduce((x,s)=>x+cal(s).pend,0),got=S.reduce((x,s)=>x+cal(s).paid,0),claims=P.filter(p=>p.status=="pending");
     const pres=S.filter(s=>s.att?.[today()]=="P").length,abs=S.filter(s=>s.att?.[today()]=="A").length;
     const none=`<div class="empty">No students yet. Use "Add student" from the menu.</div>`;
     const sb=`<input id="q" placeholder="Search by name or class">`;let h="";
-    if(tab=="d")h=`<div class="cols">${[["s",S.length,"Students"],["f",money(pend),"Total pending"],["f",money(got),"Total received"],["att",pres,"Present today"],["att",abs,"Absent today"],["a",S.filter(s=>s.adm==today()).length,"Admissions today"],["p",claims.length,"Payments to confirm"]].map(([k,v,l])=>`<div class="card pop tile" data-a="go" data-k="${k}"><i>${v}</i><small>${l}</small></div>`).join("")}</div>`;
-    if(tab=="add")h=`<div class="card pop"><h3>Add new student</h3><div class="row"><input id="fn" placeholder="Name"><input id="fc" placeholder="Class"><input id="fe" type="email" placeholder="Parent's Gmail"><input id="ff" type="number" placeholder="Pending fees ₹"></div><small class="dt">Admission date</small><input id="fd" type="date" value="${today()}"><button class="btn" data-a="add">Save student</button></div>`;
+    if(tab=="d")h=`<div class="cols">${[["s",S.length,"Students"],["f",money(pend),"Total pending"],["f",money(got),"Total received"],["att",pres,"Present today"],["att",abs,"Absent today"],["a",S.filter(s=>s.adm==today()).length,"Admissions today"],["p",claims.length,"Payments to confirm"],["ap",AP.length,"New applications"]].map(([k,v,l])=>`<div class="card pop tile" data-a="go" data-k="${k}"><i>${v}</i><small>${l}</small></div>`).join("")}</div>`;
+    if(tab=="add")h=`<div class="card pop"><h3>Add new student</h3><div class="row"><input id="fn" placeholder="Name"><input id="fc" list="cls" placeholder="Class"><datalist id="cls">${(F.list||[]).map(x=>`<option value="${esc(x.c)}">`).join("")}</datalist><input id="fe" type="email" placeholder="Parent's Gmail"></div><small class="dt">Admission date</small><input id="fd" type="date" value="${today()}"><button class="btn" data-a="add">Save student</button></div>`;
     if(tab=="s")h=`<h3>Saved students (${S.length})</h3>${sb}`+(S.length?S.map(s=>`<div class="card pop sc"><div class="top"><div><b>${esc(s.name)}</b> <small>· ${esc(s.cls)}</small><br><small>${esc(s.parentEmail)}</small><br><small>Admitted: ${esc(s.adm||"-")}</small><br><small>Address: ${esc(s.address||"not added yet")}</small></div>${ring(pct(s.att))}</div><div class="row2"><button class="ghost" data-a="del" data-id="${s.id}">Delete student</button></div></div>`).join(""):none);
     if(tab=="att")h=`<h3>Attendance · ${today()}</h3><div class="stats"><div><i style="color:var(--ok)">${pres}</i>Present</div><div><i style="color:var(--bad)">${abs}</i>Absent</div><div><i>${S.length-pres-abs}</i>Not marked</div></div>${sb}`+(S.length?S.map(s=>`<div class="card pop sc"><div class="top"><div><b>${esc(s.name)}</b><br><small>${esc(s.cls)} · overall ${pct(s.att)}%</small></div>${pa(s)}</div></div>`).join(""):none);
-    if(tab=="f")h=`<h3>Fees</h3><div class="stats"><div><i style="color:var(--ok)">${money(got)}</i>Total received</div><div><i style="color:var(--bad)">${money(pend)}</i>Total pending</div><div><i>${S.length}</i>Students</div></div>${sb}`+(S.length?S.map(s=>`<div class="card pop sc"><b style="font-size:18px">${esc(s.name)}</b> <small>· ${esc(s.cls)}</small><p style="margin:6px 0 12px"><span style="color:var(--bad)">${money(s.pending)} pending</span> · <span style="color:var(--ok)">${money(s.paid)} paid</span></p><div class="row"><div><small class="dt">Edit pending (₹)</small><input id="pe_${s.id}" type="number" value="${+s.pending||0}"><button class="ghost" data-a="edit" data-id="${s.id}">Save pending</button></div><div><small class="dt">Received now (₹)</small><input id="rc_${s.id}" type="number" placeholder="Amount"><button class="ghost" data-a="paid" data-id="${s.id}">Mark paid</button></div></div></div>`).join(""):none);
+    if(tab=="f"){const fm=FM||today().slice(0,7);let mp=0,mr=0;
+      const cards=S.map(s=>{const c=cal(s),r=c.rows.find(x=>x.m==fm);if(r){mp+=r.pend;mr+=r.paid}
+        return `<div class="card pop sc"><b style="font-size:18px">${esc(s.name)}</b> <small>· ${esc(s.cls)}</small>${c.f?"":`<br><small style="color:var(--bad)">Set the fee for "${esc(s.cls)}" in Fee structure</small>`}
+        ${r?`<p style="margin:8px 0">${mname(fm)}: fee ${money(r.due)} · <span style="color:var(--ok)">received ${money(r.paid)}</span> · <span style="color:var(--bad)">pending ${money(r.pend)}</span></p><small class="dt">Received in ${mname(fm)} (₹)</small><input id="rc_${s.id}" type="number" value="${r.paid}"><button class="ghost" data-a="recv" data-id="${s.id}" data-m="${fm}">Save received</button>`:`<p style="margin:8px 0"><small>Not admitted yet in ${mname(fm)}.</small></p>`}
+        <p style="margin-top:10px"><b style="color:var(--bad)">Total pending ${money(c.pend)}</b> <small>· ${c.np} month${c.np==1?"":"s"} pending</small></p>${c.rows.filter(x=>x.pend>0&&x.m!=fm).map(x=>`<small>${mname(x.m)}: ${money(x.pend)} pending</small><br>`).join("")}</div>`}).join("");
+      h=`<h3>Fees</h3><div class="stats"><div><i style="color:var(--ok)">${money(got)}</i>Total received</div><div><i style="color:var(--bad)">${money(pend)}</i>Total pending</div><div><i>${S.length}</i>Students</div></div><div class="card pop"><small class="dt">Month</small><input id="fm" type="month" value="${fm}"><div class="two"><div class="box"><small>Received this month</small><b style="color:var(--ok)">${money(mr)}</b></div><div class="box"><small>Pending this month</small><b style="color:var(--bad)">${money(mp)}</b></div></div></div>${sb}`+(S.length?cards:none)}
     if(tab=="a")h=`<h3>Admissions</h3><div class="cols">${[[0,"Today"],[1,"Yesterday"],[2,"Day before yesterday"]].map(([n,l])=>{const L=S.filter(s=>s.adm==dstr(n));return `<div class="card pop"><h3>${l}</h3><small>${dstr(n)} · ${L.length} admission${L.length==1?"":"s"}</small><br><br>${L.length?L.map(s=>`<div class="note"><b>${esc(s.name)}</b><br><small>${esc(s.cls)}</small></div>`).join(""):`<small>No admissions</small>`}</div>`}).join("")}</div>`;
     if(tab=="t")h=`<h3>Tests</h3>`+(S.length?S.map(s=>{const l=(s.tests||[]).slice(-1)[0];return `<div class="card pop"><div class="top"><div><b>${esc(s.name)}</b><br><small>${l?`${esc(l.n)}: ${l.m}/${l.x}`:"No tests yet"}</small></div><button class="ghost" data-a="test" data-id="${s.id}">Add test</button></div></div>`}).join(""):none);
     if(tab=="p")h=`<h3>Payments</h3>`+(P.length?[...P].sort(byTs).map(p=>`<div class="card pop"><div class="top"><div><b>${esc(p.name)}</b><br><small>${money(p.amt)} · ${esc(p.parentEmail)}</small></div><span class="chip ${p.status=="approved"?"g":p.status=="rejected"?"r":""}" style="${p.status=="pending"?"background:var(--chalk)":""}">${p.status=="pending"?"Awaiting":p.status=="approved"?"Approved":"Rejected"}</span></div>${p.status=="pending"?`<div class="row2"><button class="chip g" data-a="ok" data-id="${p.id}">Approve</button><button class="ghost" data-a="no" data-id="${p.id}">Reject</button></div>`:""}</div>`).join(""):`<div class="empty">No payment confirmations yet.</div>`);
     if(tab=="n")h=`<div class="card pop"><h3>Send a notice to everyone</h3><textarea id="nt" rows="3" placeholder="Example: No class tomorrow"></textarea><button class="btn" data-a="post">Send notice</button></div>`+N.map(n=>`<div class="card pop"><div class="top"><span>${esc(n.t)}</span><button class="ghost" data-a="deln" data-id="${n.id}">Delete</button></div></div>`).join("");
     if(tab=="v")h=`<div class="card pop"><h3>Add video</h3><input id="vl" placeholder="YouTube video link"><input id="vt" placeholder="Title (optional)"><button class="btn" data-a="addv">Add video</button></div>`+[...V].sort(byTs).map(v=>`<div class="card pop"><div class="top"><span>${esc(v.t)}</span><button class="ghost" data-a="delv" data-id="${v.id}">Delete</button></div></div>`).join("");
     if(tab=="h")h=`<div class="card pop"><h3>Post homework</h3><input id="hc" placeholder="Class (or All)"><textarea id="ht" rows="3" placeholder="Example: Exercise 4.2, Q1 to Q10"></textarea><button class="btn" data-a="addh">Post homework</button></div>`+[...H].sort(byTs).map(x=>`<div class="card pop"><div class="top"><span><b>${esc(x.cls)}</b><br>${esc(x.t)}</span><button class="ghost" data-a="delh" data-id="${x.id}">Delete</button></div></div>`).join("");
+    if(tab=="ap")h=`<h3>New admission applications (${AP.length})</h3>`+(AP.length?[...AP].sort(byTs).map(x=>`<div class="card pop"><b>${esc(x.name)}</b> <small>· ${esc(x.cls)}</small><br><small>${esc(x.phone)} · ${esc(x.email)}</small><div class="row2"><a class="ghost" style="text-decoration:none;color:inherit" href="tel:${esc(x.phone)}">📞 Call</a><button class="ghost" data-a="admit" data-id="${x.id}">Add as student</button><button class="ghost" data-a="delap" data-id="${x.id}">Delete</button></div></div>`).join(""):`<div class="empty">No new applications.</div>`);
     if(tab=="fs"){const L=F.list||[];h=`<div class="card pop"><h3>First-time registration fee</h3><input id="rg" type="number" placeholder="Registration fee ₹" value="${F.reg??""}"><button class="btn" data-a="savereg">Save registration fee</button></div><div class="card pop"><h3>Add class fee</h3><div class="row"><input id="fcn" placeholder="Class (e.g. Class 10)"><input id="fcf" type="number" placeholder="Fee ₹"></div><button class="btn" data-a="addcls">Add class</button></div>`+L.map((x,i)=>`<div class="card pop"><b>${esc(x.c)}</b><div class="row" style="margin-top:8px"><input id="cf_${i}" type="number" value="${+x.f||0}"><div><button class="ghost" data-a="savecls" data-i="${i}">Save</button> <button class="ghost" data-a="delcls" data-i="${i}">Delete</button></div></div></div>`).join("")}
     if(tab=="c")h=`<div class="card pop"><h3>Support contact</h3><small>Parents can call or WhatsApp this number. Include the country code, e.g. 919876543210.</small><input id="cp" placeholder="Phone number" value="${esc(C.phone)}"><h3>YouTube channel</h3><small>Channel ID (starts with UC). All your uploads appear in the parents' video gallery.</small><input id="cy" placeholder="UCxxxxxxxxxxxxxxxxxxxxxx" value="${esc(C.yt||YT)}"><label class="chk"><input id="cl" type="checkbox" ${C.live?"checked":""} style="width:auto;margin:0 10px 0 0">Live class is on now</label><button class="btn" data-a="savec">Save settings</button></div><div class="card pop"><h3>Payment QR code</h3><p><small>Upload your payment QR. Parents see it when they tap Pay.</small></p>${C.qr?`<img class="qr" src="${C.qr}" alt="QR">`:`<p><small>No QR uploaded yet.</small></p>`}<br><input id="qf" type="file" accept="image/*"></div>`;
-    root.innerHTML=`<header><button class="ghost" data-a="menu">☰</button><img class="lg" src="logo.png" alt=""><b>${M.find(x=>x[0]==tab)[1]}</b><span class="tag">Admin</span></header><div class="ov ${open?"on":""}" data-a="menu"></div><aside class="side ${open?"on":""}">${M.map(([k,l,i])=>`<button class="${tab==k?"on":""}" data-a="go" data-k="${k}">${i} ${l}${k=="p"&&claims.length?` (${claims.length})`:""}</button>`).join("")}<button data-a="out">🚪 Logout</button></aside><main>${h}</main>`;
+    root.innerHTML=`<header><button class="ghost" data-a="menu">☰</button><img class="lg" src="logo.png" alt=""><b>${M.find(x=>x[0]==tab)[1]}</b><span class="tag">Admin</span></header><div class="ov ${open?"on":""}" data-a="menu"></div><aside class="side ${open?"on":""}">${M.map(([k,l,i])=>`<button class="${tab==k?"on":""}" data-a="go" data-k="${k}">${i} ${l}${k=="p"&&claims.length?` (${claims.length})`:k=="ap"&&AP.length?` (${AP.length})`:""}</button>`).join("")}<button data-a="out">🚪 Logout</button></aside><main>${h}</main>`;
   };
   unsubs.push(onSnapshot(collection(db,"students"),s=>{S=s.docs.map(d=>({id:d.id,...d.data()}));draw()},e=>toast("Could not load data: "+e.code)));
   unsubs.push(onSnapshot(query(collection(db,"notices"),orderBy("ts","desc")),s=>{N=s.docs.map(d=>({id:d.id,...d.data()}));draw()}));
   unsubs.push(onSnapshot(collection(db,"payments"),s=>{P=s.docs.map(d=>({id:d.id,...d.data()}));draw()}));
+  unsubs.push(onSnapshot(collection(db,"applications"),q=>{AP=q.docs.map(d=>({id:d.id,...d.data()}));draw()}));
   unsubs.push(onSnapshot(doc(db,"config","fees"),d=>{F=d.data()||{};draw()}));
   unsubs.push(onSnapshot(collection(db,"videos"),q=>{V=q.docs.map(d=>({id:d.id,...d.data()}));draw()}));
   unsubs.push(onSnapshot(collection(db,"homework"),q=>{H=q.docs.map(d=>({id:d.id,...d.data()}));draw()}));
   unsubs.push(onSnapshot(doc(db,"config","pay"),d=>{C=d.data()||{};draw()}));
+  acts.redraw=draw;
   acts.menu=()=>{open=!open;draw()};
   acts.go=d=>{tab=d.k;open=false;draw()};
-  acts.add=async()=>{const name=val("fn"),cls=val("fc"),pe=val("fe").toLowerCase(),pending=+val("ff");
-    if(!name||!/^\S+@\S+\.\S+$/.test(pe)||isNaN(pending))return toast("Enter name, a valid Gmail and pending fees");
-    await addDoc(collection(db,"students"),{name,cls,parentEmail:pe,pending,paid:0,adm:val("fd")||today(),address:"",att:{},tests:[],ts:serverTimestamp()});toast("Student saved");tab="s";draw()};
-  acts.edit=d=>{const v=val("pe_"+d.id);if(v===""||isNaN(v))return toast("Enter a valid amount");updateDoc(R(d.id),{pending:+v});toast("Pending updated")};
-  acts.paid=d=>{const s=find(d.id),a=+val("rc_"+d.id);if(!(a>0))return toast("Enter the amount received");updateDoc(R(d.id),{pending:Math.max(0,(+s.pending||0)-a),paid:(+s.paid||0)+a});toast("Marked as paid")};
+  acts.add=async()=>{const name=val("fn"),cls=val("fc"),pe=val("fe").toLowerCase();
+    if(!name||!/^\S+@\S+\.\S+$/.test(pe))return toast("Enter the name and a valid Gmail");
+    await addDoc(collection(db,"students"),{name,cls,parentEmail:pe,pm:{},adm:val("fd")||today(),address:"",att:{},tests:[],ts:serverTimestamp()});toast("Student saved");tab="s";draw()};
+  acts.recv=d=>{const v=val("rc_"+d.id);if(v===""||isNaN(v)||+v<0)return toast("Enter a valid amount");updateDoc(R(d.id),{["pm."+d.m]:+v});toast("Saved")};
+  acts.delap=d=>confirm("Delete this application?")&&deleteDoc(doc(db,"applications",d.id));
+  acts.admit=async d=>{const x=AP.find(a=>a.id==d.id);if(!x)return;await addDoc(collection(db,"students"),{name:x.name,cls:x.cls,parentEmail:x.email,pm:{},adm:today(),address:"",att:{},tests:[],ts:serverTimestamp()});await deleteDoc(doc(db,"applications",d.id));toast("Student added");tab="s";draw()};
   acts.savec=async()=>{await setDoc(doc(db,"config","pay"),{phone:val("cp").replace(/\D/g,""),yt:val("cy")||YT,live:!!document.getElementById("cl")?.checked},{merge:true});toast("Settings saved")};
   acts.addv=async()=>{const m=val("vl").match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([\w-]{11})/);if(!m)return toast("Paste a valid YouTube video link");await addDoc(collection(db,"videos"),{vid:m[1],t:val("vt")||"Video",ts:serverTimestamp()});toast("Video added")};
   const sf=o=>setDoc(doc(db,"config","fees"),o,{merge:true});
@@ -229,26 +243,29 @@ function adminView(){
   acts.test=d=>{const p=(prompt("Test name, marks, out of (example: Unit1,42,50)")||"").split(",");
     if(p.length<3||isNaN(p[1])||isNaN(p[2]))return;updateDoc(R(d.id),{tests:arrayUnion({n:p[0].trim(),m:+p[1],x:+p[2],d:today()})});toast("Test added")};
   acts.del=d=>confirm("Delete this student and all their data?")&&deleteDoc(R(d.id));
-  acts.ok=d=>{const p=P.find(x=>x.id==d.id),s=find(p.sid);if(!s)return toast("Student not found");updateDoc(R(p.sid),{pending:Math.max(0,(+s.pending||0)-p.amt),paid:(+s.paid||0)+p.amt});updateDoc(doc(db,"payments",d.id),{status:"approved"});toast("Payment approved")};
+  acts.ok=d=>{const p=P.find(x=>x.id==d.id),s=find(p.sid);if(!s)return toast("Student not found");const rows=cal(s).rows,up={};let left=p.amt;
+    for(const r of rows){if(left<=0)break;if(r.pend>0){const a=Math.min(left,r.pend);up["pm."+r.m]=r.paid+a;left-=a}}
+    if(left>0&&rows.length){const l=rows[rows.length-1];up["pm."+l.m]=(up["pm."+l.m]??l.paid)+left}
+    if(Object.keys(up).length)updateDoc(R(p.sid),up);updateDoc(doc(db,"payments",d.id),{status:"approved"});toast("Payment approved")};
   acts.no=d=>updateDoc(doc(db,"payments",d.id),{status:"rejected"});
   acts.post=async()=>{const t=val("nt");if(!t)return toast("Write a notice first");await addDoc(collection(db,"notices"),{t,ts:serverTimestamp()});toast("Notice sent")};
   acts.deln=d=>deleteDoc(doc(db,"notices",d.id));
 }
 
 function parentView(u,em){
-  let S=[],N=[],P=[],V=[],H=[],F={},C={},pay=null,play=null,pg="h";
+  let S=[],N=[],P=[],V=[],H=[],A=[],C={},pay=null,ld=false,play=null,pg="h";
   const draw=()=>{
     let h="";
     if(pg=="h"){
       h=`<h3 class="pop" style="font-size:22px">Welcome, ${esc((u.displayName||"").split(" ")[0])}</h3>`+(C.live?`<div class="note pop" data-a="pg" data-k="v" style="cursor:pointer">🔴 Live class is on now. Tap to watch.</div>`:"");
-      h+=S.length?S.map(s=>{const t=(s.tests||[]).slice(-3).reverse(),l=t[0],wait=P.some(p=>p.sid==s.id&&p.status=="pending");
+      h+=S.length?S.map(s=>{const t=(s.tests||[]).slice(-3).reverse(),l=t[0],wait=P.some(p=>p.sid==s.id&&p.status=="pending"),c=cal(s),cur=c.rows[c.rows.length-1]||{due:0,paid:0,pend:0};
         return `<div class="card pop"><div class="top"><div><b style="font-size:18px">${esc(s.name)}</b><br><small>${esc(s.cls)} · attendance</small></div>${ring(pct(s.att))}</div>
         ${l?`<p style="margin-top:10px"><small>Last test: ${esc(l.n)}</small> <b>${l.m}/${l.x}</b></p><div class="bar"><span style="width:${Math.round(l.m*100/l.x)}%"></span></div>`:`<p style="margin-top:10px"><small>No test reports yet.</small></p>`}
         ${t.slice(1).map(x=>`<small>${esc(x.n)}: ${x.m}/${x.x}</small><br>`).join("")}
-        <div class="two"><div class="box"><small>Pending</small><b style="color:var(--bad)">${money(s.pending)}</b></div><div class="box"><small>Paid</small><b style="color:var(--ok)">${money(s.paid)}</b></div></div>
-        <div style="margin-top:10px">${+s.pending>0?(wait?`<small>Payment sent. Waiting for confirmation.</small>`:`<button class="btn" data-a="pay" data-id="${s.id}">Pay ${money(s.pending)}</button>`):`<small>All fees are paid. Thank you!</small>`}</div>
+        <div class="two"><div class="box"><small>This month pending</small><b style="color:var(--bad)">${money(cur.pend)}</b><small>Fee ${money(cur.due)} · received ${money(cur.paid)}</small></div><div class="box"><small>Total pending</small><b style="color:var(--bad)">${money(c.pend)}</b><small>${c.np} month${c.np==1?"":"s"} pending · paid so far ${money(c.paid)}</small></div></div>
+        <div style="margin-top:10px">${c.pend>0?(wait?`<small>Payment sent. Waiting for confirmation.</small>`:`<button class="btn" data-a="pay" data-id="${s.id}">Pay ${money(c.pend)}</button>`):`<small>All fees are paid. Thank you!</small>`}</div>
         <div style="margin-top:12px"><small class="dt">Student address</small><input id="ad_${s.id}" placeholder="Enter address" value="${esc(s.address)}"><button class="ghost" data-a="addr" data-id="${s.id}">Save address</button></div></div>`}).join(""):
-        `<div class="empty">This Gmail (${esc(em)}) is not linked to any student yet.<br>Ask your teacher to add this Gmail.</div>`;
+        (!ld?"":A.length?`<div class="card pop"><h3>Application received</h3><p>Thank you! Your application for <b>${esc(A[0].name)}</b> (${esc(A[0].cls)}) has been sent. The teacher will call you on ${esc(A[0].phone)}.</p></div>`:`<div class="card pop"><h3>New student? Apply here</h3><p><small>This Gmail is not linked to a student yet. Fill in the form and the teacher will call you.</small></p><br><input id="an" placeholder="Student name"><input id="ac" list="cls" placeholder="Class"><datalist id="cls">${(F.list||[]).map(x=>`<option value="${esc(x.c)}">`).join("")}</datalist><input id="ap" type="tel" maxlength="10" placeholder="Mobile number (10 digits)"><button class="btn" data-a="apply">Submit application</button></div>`);
       const cl=S.map(s=>(s.cls||"").toLowerCase()),hw=H.filter(x=>(x.cls||"").toLowerCase()=="all"||cl.includes((x.cls||"").toLowerCase())).sort(byTs);
       if(hw.length)h+=`<h3 style="margin-top:18px">Homework</h3>`+hw.map(x=>`<div class="note pop"><small>${esc(x.cls)}</small><br>${esc(x.t)}</div>`).join("");
       if(N.length)h+=`<h3 style="margin-top:18px">Notices</h3>`+N.map(n=>`<div class="note pop">${esc(n.t)}</div>`).join("");
@@ -259,25 +276,26 @@ function parentView(u,em){
     if(pg=="i"){const L=F.list||[];h=`<h3 class="pop">Fee structure</h3><div class="card pop"><small>First-time registration fee</small><div class="pay">${F.reg!=null&&F.reg!==""?money(F.reg):"Not added yet"}</div></div>`+(L.length?`<div class="card pop"><h3>Fee by class</h3>${L.map(x=>`<div class="top" style="padding:8px 0;border-bottom:1px dashed var(--line)"><span>${esc(x.c)}</span><b>${money(x.f)}</b></div>`).join("")}</div>`:`<div class="empty">Class fees have not been added yet.</div>`)}
     if(pg=="s")h=`<h3 class="pop">Support</h3><div class="card pop"><p>Need help with fees, attendance or anything else? Contact your teacher.</p>${C.phone?`<a class="btn lnk" href="https://wa.me/${esc(C.phone)}" target="_blank">Chat on WhatsApp</a><a class="ghost lnk" href="tel:+${esc(C.phone)}">Call</a>`:`<br><small>Support details have not been added yet.</small>`}<a class="ghost lnk" href="${IG}" target="_blank">Instagram</a><a class="ghost lnk" href="${YTURL}" target="_blank">YouTube channel</a></div>`;
     const s=S.find(x=>x.id==pay);
-    if(s)h+=`<div class="modal"><div class="card"><h3>Pay ${money(s.pending)}</h3>${C.qr?`<img src="${C.qr}" alt="Payment QR">`:`<p>The QR code is not available yet. Please contact your teacher.</p>`}<p><small>Scan with any UPI app and pay. After paying, choose:</small></p><div class="row"><button class="btn" data-a="done">Payment done</button><button class="ghost" data-a="notdone">Not done</button></div></div></div>`;
+    if(s)h+=`<div class="modal"><div class="card"><h3>Pay ${money(cal(s).pend)}</h3>${C.qr?`<img src="${C.qr}" alt="Payment QR">`:`<p>The QR code is not available yet. Please contact your teacher.</p>`}<p><small>Scan with any UPI app and pay. After paying, choose:</small></p><div class="row"><button class="btn" data-a="done">Payment done</button><button class="ghost" data-a="notdone">Not done</button></div></div></div>`;
     if(play)h+=`<div class="modal" data-a="stop"><div class="card" style="max-width:560px"><iframe src="https://www.youtube-nocookie.com/embed/${esc(play)}?autoplay=1" allow="autoplay;encrypted-media;fullscreen" allowfullscreen></iframe><br><br><button class="ghost" data-a="stop">Close</button></div></div>`;
     root.innerHTML=`<header><img class="lg" src="logo.png" alt=""><b>Topper's Hub</b><span class="tag">Parent</span><button class="ghost" data-a="out">Logout</button></header><main>${h}</main><div class="tb">${[["h","🏠 Home"],["v","🎬 Videos"],["i","🏷 Fees"],["s","💬 Support"]].map(([k,l])=>`<button class="${pg==k?"on":""}" data-a="pg" data-k="${k}">${l}</button>`).join("")}</div>`;
   };
   const L=(c,f,w)=>unsubs.push(onSnapshot(w||collection(db,c),q=>{f(q.docs.map(d=>({id:d.id,...d.data()})));draw()}));
-  unsubs.push(onSnapshot(query(collection(db,"students"),where("parentEmail","==",em)),q=>{S=q.docs.map(d=>({id:d.id,...d.data()}));draw()},e=>toast("Could not load data: "+e.code)));
+  unsubs.push(onSnapshot(query(collection(db,"students"),where("parentEmail","==",em)),q=>{S=q.docs.map(d=>({id:d.id,...d.data()}));ld=true;draw()},e=>toast("Could not load data: "+e.code)));
   L("payments",x=>P=x,query(collection(db,"payments"),where("parentEmail","==",em)));
   L("notices",x=>N=x,query(collection(db,"notices"),orderBy("ts","desc")));
-  L("videos",x=>V=x);L("homework",x=>H=x);
+  L("applications",x=>A=x,query(collection(db,"applications"),where("email","==",em)));L("videos",x=>V=x);L("homework",x=>H=x);
   unsubs.push(onSnapshot(doc(db,"config","fees"),d=>{F=d.data()||{};draw()}));
   unsubs.push(onSnapshot(doc(db,"config","pay"),d=>{C=d.data()||{};draw()}));
   acts.pg=d=>{pg=d.k;draw()};
   acts.play=d=>{play=d.id;draw()};
   acts.stop=()=>{play=null;draw()};
+  acts.apply=async()=>{const name=val("an"),cls=val("ac"),phone=val("ap").replace(/\D/g,"");if(!name||!cls||phone.length<10)return toast("Enter the student name, class and a 10-digit mobile number");try{await addDoc(collection(db,"applications"),{name,cls,phone,email:em,ts:serverTimestamp()});toast("Application submitted")}catch(e){toast("Could not submit")}};
   acts.addr=async d=>{try{await updateDoc(doc(db,"students",d.id),{address:val("ad_"+d.id)});toast("Address saved")}catch(e){toast("Could not save address")}};
   acts.pay=d=>{pay=d.id;draw()};
   acts.notdone=()=>{pay=null;draw()};
   acts.done=async()=>{const s=S.find(x=>x.id==pay);if(!s)return;
-    try{await addDoc(collection(db,"payments"),{sid:s.id,name:s.name,amt:+s.pending,parentEmail:em,status:"pending",ts:serverTimestamp()});toast("Sent to your teacher for confirmation")}catch(e){toast("Could not send payment")}
+    try{await addDoc(collection(db,"payments"),{sid:s.id,name:s.name,amt:cal(s).pend,parentEmail:em,status:"pending",ts:serverTimestamp()});toast("Sent to your teacher for confirmation")}catch(e){toast("Could not send payment")}
     pay=null;draw()};
 }
 </script>
