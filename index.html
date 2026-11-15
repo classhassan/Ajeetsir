@@ -162,6 +162,24 @@ header{background:rgba(8,8,11,.78);backdrop-filter:blur(14px);border-bottom:1px 
 .lbi{position:absolute;z-index:2;bottom:16px;left:0;right:0;text-align:center;color:#fff;font-size:13px}
 .lbcl{position:absolute;z-index:3;top:14px;right:14px;width:40px;height:40px;border-radius:50%;border:0;background:#000a;color:#fff;font-size:18px;cursor:pointer;box-shadow:0 0 0 1px #ffffff40}
 .tb button{font-size:11px;padding:7px 2px}
+.hero{background:linear-gradient(135deg,#3a2f10,#1f2030 60%,#2a2a5a);border:1px solid #f5c45133;border-radius:20px;padding:18px;margin-bottom:12px;box-shadow:0 10px 30px #0005}
+.hero h2{font-size:26px;margin:2px 0 4px;background:linear-gradient(90deg,#fff,#f5c451);-webkit-background-clip:text;background-clip:text;color:transparent}
+.qa{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:4px}
+.qa button{background:linear-gradient(160deg,#1c1d28,#14151d);border:1px solid #ffffff14;border-radius:16px;padding:12px 2px;cursor:pointer;font-size:12px;transition:.2s}
+.qa button:active{transform:scale(.95)}.qa i{display:block;font-style:normal;font-size:24px;margin-bottom:4px}
+.sec{display:flex;align-items:center;gap:10px;margin:24px 0 10px}
+.sec span{width:34px;height:34px;border-radius:10px;background:#f5c4512a;display:grid;place-items:center;font-size:17px}
+.sec h3{margin:0}
+.sub{background:#0d0e14;border-radius:14px;padding:12px;margin-top:10px}
+.st{font-size:11px;font-weight:700;color:var(--chalk);letter-spacing:.6px;margin-bottom:8px;text-transform:uppercase}
+.who{display:flex;gap:12px;align-items:center}
+.av{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#f5c451,#e9a23b);color:#1a1405;display:grid;place-items:center;font-weight:800;font-size:20px;flex:none}
+.sub .box{background:#16171f}
+.vg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.vt{cursor:pointer;background:linear-gradient(160deg,#1c1d28,#14151d);border:1px solid #ffffff12;border-radius:14px;overflow:hidden;transition:.2s}
+.vt:active{transform:scale(.97)}.vt .vid img{border-radius:0;aspect-ratio:16/9;object-fit:cover}
+.vt .vid::after{font-size:26px}
+.vt p{padding:8px 10px;font-size:13px;font-weight:600;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:50px}
 .vplay{width:100%;border-radius:12px;background:#000;display:block;max-height:60vh}
 .pg{height:10px;border-radius:9px;background:#0d0e14;overflow:hidden;margin:8px 0}.pg span{display:block;height:100%;width:0;background:linear-gradient(90deg,#f5c451,#e9a23b);transition:width .2s}
 @keyframes ppin{from{opacity:0;transform:translateY(60px) scale(.8) rotate(-2deg)}}
@@ -329,26 +347,27 @@ function adminView(){
 }
 
 function parentView(u,em){
-  let S=[],N=[],P=[],V=[],H=[],A=[],C={},PP={},AL=[],IT=[],openA=null,lb=null,FULL={},pay=null,ld=false,play=null,pg="h",ppSeen=false;
+  let S=[],N=[],P=[],V=[],H=[],A=[],C={},PP={},AL=[],IT=[],openA=null,lb=null,FULL={},EA={},pay=null,ld=false,play=null,pg="h",ppSeen=false;
   const aitems=()=>IT.filter(x=>x.aid==openA).sort(byTs);
   const draw=()=>{
     let h="";
     if(pg=="h"){
-      h=`<h3 class="pop" style="font-size:22px">Welcome, ${esc((u.displayName||"").split(" ")[0])}</h3>`+(C.live?`<div class="note pop" data-a="pg" data-k="v" style="cursor:pointer">🔴 Live class is on now. Tap to watch.</div>`:"");
-      h+=S.length?S.map(s=>{const t=(s.tests||[]).slice(-3).reverse(),l=t[0],wait=P.some(p=>p.sid==s.id&&p.status=="pending"),c=cal(s),cur=c.rows[c.rows.length-1]||{due:0,paid:0,pend:0};
-        return `<div class="card pop"><div class="top"><div><b style="font-size:18px">${esc(s.name)}</b><br><small>${esc(s.cls)} · attendance</small></div>${ring(pct(s.att))}</div>
-        ${l?`<p style="margin-top:10px"><small>Last test: ${esc(l.n)}</small> <b>${l.m}/${l.x}</b></p><div class="bar"><span style="width:${Math.round(l.m*100/l.x)}%"></span></div>`:`<p style="margin-top:10px"><small>No test reports yet.</small></p>`}
-        ${t.slice(1).map(x=>`<small>${esc(x.n)}: ${x.m}/${x.x}</small><br>`).join("")}
-        <div class="two"><div class="box"><small>This month pending</small><b style="color:var(--bad)">${money(cur.pend)}</b><small>Fee ${money(cur.due)} · received ${money(cur.paid)}</small></div><div class="box"><small>Total pending</small><b style="color:var(--bad)">${money(c.pend)}</b><small>${c.np} month${c.np==1?"":"s"} pending · paid so far ${money(c.paid)}</small></div></div>
-        <div style="margin-top:10px">${c.pend>0?(wait?`<small>Payment sent. Waiting for confirmation.</small>`:`<button class="btn" data-a="pay" data-id="${s.id}">Pay ${money(c.pend)}</button>`):`<small>All fees are paid. Thank you!</small>`}</div>
-        <div style="margin-top:12px"><small class="dt">Student address</small><input id="ad_${s.id}" placeholder="Enter address" value="${esc(s.address)}"><button class="ghost" data-a="addr" data-id="${s.id}">Save address</button></div></div>`}).join(""):
+      const first=esc((u.displayName||"").split(" ")[0]||"Parent");
+      h=`<div class="hero pop"><small>Welcome 👋</small><h2>${first}</h2><small>Topper's Hub Education · attendance, fees and tests of your child</small></div>`+(C.live?`<div class="note pop" data-a="pg" data-k="v" style="cursor:pointer">🔴 Live class is on now. Tap to watch.</div>`:"")+`<div class="qa">${[["v","🎬","Videos"],["g","🖼","Album"],["i","🏷","Fee list"],["s","💬","Help"]].map(([k,i,l])=>`<button class="pop" data-a="pg" data-k="${k}"><i>${i}</i>${l}</button>`).join("")}</div>`;
+      h+=S.length?`<div class="sec"><span>👩‍🎓</span><h3>My child</h3></div>`+S.map(s=>{const t=(s.tests||[]).slice().reverse(),l=t[0],wait=P.some(p=>p.sid==s.id&&p.status=="pending"),c=cal(s),cur=c.rows[c.rows.length-1]||{due:0,paid:0,pend:0},ed=EA[s.id]||!s.address;
+        return `<div class="card pop"><div class="who"><div class="av">${esc((s.name||"?").trim().charAt(0).toUpperCase())}</div><div><b style="font-size:18px">${esc(s.name)}</b><br><small>Class: ${esc(s.cls)}</small></div></div>
+        <div class="sub"><div class="st">✅ Attendance</div><div class="top"><small>Present in ${pct(s.att)}% of the classes so far</small>${ring(pct(s.att))}</div></div>
+        <div class="sub"><div class="st">📝 Test results</div>${l?`<div class="top"><small>${esc(l.n)}</small><b>${l.m}/${l.x}</b></div><div class="bar"><span style="width:${Math.round(l.m*100/l.x)}%"></span></div>${t.slice(1,4).map(x=>`<div class="top" style="margin-top:4px"><small>${esc(x.n)}</small><small>${x.m}/${x.x}</small></div>`).join("")}`:`<small>No test reports yet.</small>`}</div>
+        <div class="sub"><div class="st">💰 Fees</div><div class="two" style="margin-top:0"><div class="box"><small>This month pending</small><b style="color:var(--bad)">${money(cur.pend)}</b><small>Fee ${money(cur.due)} · received ${money(cur.paid)}</small></div><div class="box"><small>Total pending</small><b style="color:var(--bad)">${money(c.pend)}</b><small>${c.np} month${c.np==1?"":"s"} pending · paid so far ${money(c.paid)}</small></div></div>
+        <div style="margin-top:10px">${c.pend>0?(wait?`<small>Payment sent. Waiting for confirmation.</small>`:`<button class="btn" data-a="pay" data-id="${s.id}">Pay ${money(c.pend)}</button>`):`<small>All fees are paid. Thank you!</small>`}</div></div>
+        <div class="sub"><div class="st">📍 Address</div>${ed?`<input id="ad_${s.id}" placeholder="Enter address" value="${esc(s.address)}"><button class="ghost" data-a="addr" data-id="${s.id}">Save address</button>`:`<p style="margin-bottom:8px">${esc(s.address)}</p><button class="ghost" data-a="eaddr" data-id="${s.id}">Change address</button>`}</div></div>`}).join(""):
         (!ld?"":A.length?`<div class="card pop"><h3>Application received</h3><p>Thank you! Your application for <b>${esc(A[0].name)}</b> (${esc(A[0].cls)}) has been sent. The teacher will call you on ${esc(A[0].phone)}.</p></div>`:`<div class="card pop"><h3>New student? Apply here</h3><p><small>This Gmail is not linked to a student yet. Fill in the form and the teacher will call you.</small></p><br><input id="an" placeholder="Student name"><input id="ac" list="cls" placeholder="Class"><datalist id="cls">${(F.list||[]).map(x=>`<option value="${esc(x.c)}">`).join("")}</datalist><input id="ap" type="tel" maxlength="10" placeholder="Mobile number (10 digits)"><button class="btn" data-a="apply">Submit application</button></div>`);
       const cl=S.map(s=>(s.cls||"").toLowerCase()),hw=H.filter(x=>(x.cls||"").toLowerCase()=="all"||cl.includes((x.cls||"").toLowerCase())).sort(byTs);
-      if(hw.length)h+=`<h3 style="margin-top:18px">Homework</h3>`+hw.map(x=>`<div class="note pop"><small>${esc(x.cls)}</small><br>${esc(x.t)}</div>`).join("");
-      if(N.length)h+=`<h3 style="margin-top:18px">Notices</h3>`+N.map(n=>`<div class="note pop">${esc(n.t)}</div>`).join("");
+      if(hw.length)h+=`<div class="sec"><span>📚</span><h3>Homework</h3></div>`+hw.map(x=>`<div class="note pop"><small>Class: ${esc(x.cls)}</small><br>${esc(x.t)}</div>`).join("");
+      if(N.length)h+=`<div class="sec"><span>📢</span><h3>Notices</h3></div>`+N.map(n=>`<div class="note pop">${esc(n.t)}</div>`).join("");
     }
-    if(pg=="v"){
-      h=`<h3 class="pop">Video gallery</h3>`+(C.live?`<div class="card pop"><b>🔴 Live now</b><br><br><iframe src="https://www.youtube-nocookie.com/embed/live_stream?channel=${esc(C.yt||YT)}&autoplay=1" allow="autoplay;encrypted-media;fullscreen" allowfullscreen></iframe></div>`:"")+`<h3>Latest videos</h3><div class="card pop"><iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=UU${esc((C.yt||YT).slice(2))}" allowfullscreen></iframe></div>`+(V.length?`<h3>More videos</h3>`:"")+[...V].sort(byTs).map(v=>v.url?`<div class="card pop"><video class="vplay" controls playsinline preload="metadata" controlslist="nodownload" src="${esc(v.url)}"></video><p style="margin-top:8px"><b>${esc(v.t)}</b></p></div>`:`<div class="card pop"><div class="vid" data-a="play" data-id="${esc(v.vid)}"><img src="https://img.youtube.com/vi/${esc(v.vid)}/hqdefault.jpg" alt=""></div><p style="margin-top:8px"><b>${esc(v.t)}</b></p></div>`).join("");
+    if(pg=="v"){const YV=[...V].filter(v=>v.vid).sort(byTs);
+      h=`<h3 class="pop" style="font-size:22px">🎬 Videos</h3>`+(C.live?`<div class="sec"><span>🔴</span><h3>Live now</h3></div><div class="card pop"><iframe src="https://www.youtube-nocookie.com/embed/live_stream?channel=${esc(C.yt||YT)}&autoplay=1" allow="autoplay;encrypted-media;fullscreen" allowfullscreen></iframe></div>`:"")+`<div class="sec"><span>📺</span><h3>Latest from the channel</h3></div><div class="card pop"><iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=UU${esc((C.yt||YT).slice(2))}" allowfullscreen></iframe></div>`+(YV.length?`<div class="sec"><span>🎞</span><h3>More videos</h3></div><small style="display:block;margin:-4px 0 10px">Tap a video to watch it full screen.</small><div class="vg">${YV.map(v=>`<div class="vt pop" data-a="play" data-id="${esc(v.vid)}"><div class="vid"><img src="https://img.youtube.com/vi/${esc(v.vid)}/mqdefault.jpg" alt="" loading="lazy"></div><p>${esc(v.t)}</p></div>`).join("")}</div>`:"");
     }
     if(pg=="i"){const L=F.list||[];h=`<h3 class="pop">Fee structure</h3><div class="card pop"><small>First-time registration fee</small><div class="pay">${F.reg!=null&&F.reg!==""?money(F.reg):"Not added yet"}</div></div>`+(L.length?`<div class="card pop"><h3>Fee by class</h3>${L.map(x=>`<div class="top" style="padding:8px 0;border-bottom:1px dashed var(--line)"><span>${esc(x.c)}</span><b>${money(x.f)}</b></div>`).join("")}</div>`:`<div class="empty">Class fees have not been added yet.</div>`)}
     if(pg=="s")h=`<h3 class="pop">Support</h3><div class="card pop"><p>Need help with fees, attendance or anything else? Contact your teacher.</p>${C.phone?`<a class="btn lnk" href="https://wa.me/${esc(C.phone)}" target="_blank">Chat on WhatsApp</a><a class="ghost lnk" href="tel:+${esc(C.phone)}">Call</a>`:`<br><small>Support details have not been added yet.</small>`}<a class="ghost lnk" href="${IG}" target="_blank">Instagram</a><a class="ghost lnk" href="${YTURL}" target="_blank">YouTube channel</a></div>`;
@@ -364,7 +383,7 @@ function parentView(u,em){
     if(lb!=null){const LL=aitems(),it=LL[lb];if(it)h+=`<div class="lbx"><div class="lbb" data-a="lbx"></div><button class="lbcl" data-a="lbx" aria-label="Close">✕</button>${LL.length>1?`<button class="lbn l" data-a="lbp">‹</button><button class="lbn r" data-a="lbnx">›</button>`:""}<div class="lbc">${it.k=="v"?`<video controls autoplay playsinline src="${esc(it.url)}"></video>`:`<img src="${FULL[it.id]||it.th||""}" alt="" ${FULL[it.id]?"":'style="filter:blur(6px)"'}>`}</div><div class="lbi">${lb+1} / ${LL.length}</div></div>`}
     const s=S.find(x=>x.id==pay);
     if(s)h+=`<div class="modal"><div class="card"><h3>Pay ${money(cal(s).pend)}</h3>${C.qr?`<img src="${C.qr}" alt="Payment QR">`:`<p>The QR code is not available yet. Please contact your teacher.</p>`}<p><small>Scan with any UPI app and pay. After paying, choose:</small></p><div class="row"><button class="btn" data-a="done">Payment done</button><button class="ghost" data-a="notdone">Not done</button></div></div></div>`;
-    if(play)h+=`<div class="modal" data-a="stop"><div class="card" style="max-width:560px"><iframe src="https://www.youtube-nocookie.com/embed/${esc(play)}?autoplay=1" allow="autoplay;encrypted-media;fullscreen" allowfullscreen></iframe><br><br><button class="ghost" data-a="stop">Close</button></div></div>`;
+    if(play)h+=`<div class="modal"><div class="ppb" data-a="stop"></div><div class="card" style="max-width:640px;position:relative;z-index:1"><div class="top" style="margin-bottom:10px"><b style="text-align:left">${esc((V.find(v=>v.vid==play)||{}).t||"Video")}</b><button class="ghost" data-a="stop">✕ Close</button></div><iframe src="https://www.youtube-nocookie.com/embed/${esc(play)}?autoplay=1&rel=0" allow="autoplay;encrypted-media;fullscreen" allowfullscreen></iframe></div></div>`;
     let seen=ppSeen;try{if(PP.v&&sessionStorage.getItem("pp")==String(PP.v))seen=true}catch(e){}
     if(PP.on&&(PP.img||PP.t||PP.title)&&!seen)h+=popupHTML(PP);
     render(`<header><img class="lg" src="logo.png" alt=""><b>Topper's Hub</b><span class="tag">Parent</span><button class="ghost" data-a="out">Logout</button></header><main>${h}</main><div class="tb">${[["h","🏠","Home"],["v","🎬","Videos"],["g","🖼","Album"],["i","🏷","Fees"],["s","💬","Support"]].map(([k,i,l])=>`<button class="${pg==k?"on":""}" data-a="pg" data-k="${k}"><i style="display:block;font-style:normal;font-size:18px">${i}</i>${l}</button>`).join("")}</div>`);
@@ -392,7 +411,8 @@ function parentView(u,em){
   acts.play=d=>{play=d.id;draw()};
   acts.stop=()=>{play=null;draw()};
   acts.apply=async()=>{const name=val("an"),cls=val("ac"),phone=val("ap").replace(/\D/g,"");if(!name||!cls||phone.length<10)return toast("Enter the student name, class and a 10-digit mobile number");try{await addDoc(collection(db,"applications"),{name,cls,phone,email:em,ts:serverTimestamp()});toast("Application submitted")}catch(e){toast("Could not submit")}};
-  acts.addr=async d=>{try{await updateDoc(doc(db,"students",d.id),{address:val("ad_"+d.id)});toast("Address saved")}catch(e){toast("Could not save address")}};
+  acts.eaddr=d=>{EA[d.id]=true;draw()};
+  acts.addr=async d=>{const a=val("ad_"+d.id);if(!a)return toast("Enter the address first");try{await updateDoc(doc(db,"students",d.id),{address:a});delete EA[d.id];toast("Address saved");draw()}catch(e){toast("Could not save address")}};
   acts.pay=d=>{pay=d.id;draw()};
   acts.notdone=()=>{pay=null;draw()};
   acts.done=async()=>{const s=S.find(x=>x.id==pay);if(!s)return;
